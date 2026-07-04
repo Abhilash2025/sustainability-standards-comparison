@@ -3,909 +3,865 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBTi v2 vs ESRS E1 — Comparative Analysis</title>
+<title>SBTi CNZS V2.0 vs ESRS E1 &amp; CSRD Voluntary — Comparative Analysis</title>
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --bg-elevated: #111111;
-    --bg-card: #141414;
-    --bg-hover: #1a1a1a;
-    --border: #262626;
-    --border-subtle: #1c1c1c;
-    --text-primary: #f5f5f5;
-    --text-secondary: #a3a3a3;
-    --text-muted: #737373;
-    --accent: #14b8a6;
-    --accent-soft: rgba(20, 184, 166, 0.12);
-    --accent-glow: rgba(20, 184, 166, 0.25);
-    --sbti: #3b82f6;
-    --esrs: #f97316;
-    --csrd: #22c55e;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --gap: 1rem;
-  }
-  [data-theme="light"] {
-    --bg: #ffffff;
-    --bg-elevated: #f8f8f8;
-    --bg-card: #f5f5f5;
-    --bg-hover: #eeeeee;
-    --border: #e0e0e0;
-    --border-subtle: #f0f0f0;
-    --text-primary: #111111;
-    --text-secondary: #444444;
-    --text-muted: #888888;
-    --accent: #0d9488;
-    --accent-soft: rgba(13, 148, 136, 0.08);
-    --accent-glow: rgba(13, 148, 136, 0.15);
-    --sbti: #2563eb;
-    --esrs: #ea580c;
-    --csrd: #16a34a;
-  }
+:root{ --bg:#0a0a0a; --bg-elevated:#111111; --bg-card:#141414; --bg-hover:#1a1a1a;
+  --border:#262626; --border-subtle:#1c1c1c; --text-primary:#f5f5f5; --text-secondary:#a3a3a3; --text-muted:#737373;
+  --accent:#14b8a6; --accent-soft:rgba(20,184,166,0.12); --accent-glow:rgba(20,184,166,0.25);
+  --sbti:#3b82f6; --esrs:#f97316; --csrd:#22c55e;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"SF Mono",Monaco,"Inconsolata","Fira Code",monospace;
+  --radius:12px; --radius-sm:8px; --gap:1rem; }
+[data-theme="light"]{ --bg:#ffffff; --bg-elevated:#f8f8f8; --bg-card:#f5f5f5; --bg-hover:#eeeeee;
+  --border:#e0e0e0; --border-subtle:#f0f0f0; --text-primary:#111111; --text-secondary:#444444; --text-muted:#888888;
+  --accent:#0d9488; --accent-soft:rgba(13,148,136,0.08); --accent-glow:rgba(13,148,136,0.15);
+  --sbti:#2563eb; --esrs:#ea580c; --csrd:#16a34a; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: var(--font-sans);
-    background: var(--bg);
-    color: var(--text-primary);
-    line-height: 1.55;
-    font-size: 15px;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary);line-height:1.55;font-size:15px;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:60px}
 
-  /* ── Layout ── */
-  .app { display: flex; min-height: 100vh; }
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    width: 220px;
-    background: var(--bg-elevated);
-    border-right: 1px solid var(--border-subtle);
-    padding: 24px 16px;
-    display: flex; flex-direction: column; gap: 24px;
-    z-index: 50;
-    overflow-y: auto;
-  }
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  .main { margin-left: 220px; flex: 1; min-width: 0; }
+.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:var(--accent);opacity:0;animation:floatDrift linear infinite;filter:blur(1px)}
+.particle-orb{position:absolute;border-radius:50%;background:radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%);opacity:0;animation:orbDrift ease-in-out infinite}
+@keyframes floatDrift{0%{transform:translateY(110vh) translateX(-20px) scale(0.5);opacity:0} 8%{opacity:0.25} 92%{opacity:0.25} 100%{transform:translateY(-20vh) translateX(40px) scale(1.2);opacity:0}}
+@keyframes orbDrift{0%,100%{transform:translateY(0) translateX(0);opacity:0} 25%{opacity:0.6} 50%{transform:translateY(-30px) translateX(20px);opacity:0.3} 75%{opacity:0.6}}
 
-  /* ── Sidebar branding ── */
-  .brand {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--text-muted);
-    padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);
-  }
-  .brand strong { color: var(--text-primary); display: block; font-size: 13px; letter-spacing: 0.04em; margin-top: 2px; }
+.topbar{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-subtle);z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+[data-theme="light"] .topbar{background:rgba(255,255,255,0.92)}
+.topbar-brand{font-size:13px;font-weight:700;letter-spacing:0.04em;color:var(--text-primary);white-space:nowrap}
+.topbar-brand span{color:var(--accent)}
+.topbar-nav{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.topbar-nav::-webkit-scrollbar{display:none}
+.topbar-nav a{padding:6px 10px;border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);text-decoration:none;
+  transition:all .15s ease;white-space:nowrap;border:1px solid transparent;font-weight:500}
+.topbar-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}
+.topbar-nav a.active{color:var(--accent);background:var(--accent-soft);border-color:var(--accent)}
+.topbar-nav a .num{font-size:10px;color:var(--text-muted);margin-right:4px;font-variant-numeric:tabular-nums}
+.topbar-nav a.active .num{color:var(--accent)}
+.topbar-actions{display:flex;align-items:center;gap:12px}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:5px 12px;border-radius:var(--radius-sm);font-size:11px;cursor:pointer;font-family:var(--font-sans);letter-spacing:0.04em}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.progress-track{width:60px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:var(--accent);transition:width .3s ease}
 
-  /* ── Sidebar nav ── */
-  .nav { display: flex; flex-direction: column; gap: 2px; }
-  .nav a {
-    display: block; padding: 7px 10px; border-radius: var(--radius-sm);
-    font-size: 13px; color: var(--text-secondary); text-decoration: none;
-    transition: all .15s ease; border: 1px solid transparent;
-  }
-  .nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
-  .nav a.active { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); font-weight: 500; }
-  .nav a .num { display: inline-block; width: 20px; font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 11px; }
-  .nav a.active .num { color: var(--accent); }
+section{padding:72px 48px;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+section+section{border-top:1px solid var(--border-subtle)}
+.section-label{font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block}
+h1{font-size:42px;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+h2{font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.01em;margin-bottom:16px}
+h3{font-size:18px;font-weight:600;margin:24px 0 10px}
+p{color:var(--text-secondary);margin-bottom:14px;max-width:720px}
+.lead{font-size:17px;color:var(--text-secondary);max-width:680px;margin-bottom:28px;line-height:1.6}
+.meta{font-size:12px;color:var(--text-muted);margin-bottom:32px}
 
-  .progress-track { height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; margin-top: 8px; }
-  .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width .3s ease; }
+#hero{min-height:60vh;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-elevated) 100%);text-align:center;align-items:center}
+#hero h1{max-width:800px}
+#hero .lead{max-width:720px;margin-left:auto;margin-right:auto}
+#hero .hero-stats{display:flex;gap:48px;margin-top:32px;justify-content:center}
+.hero-stat strong{display:block;font-size:28px;font-weight:700;color:var(--text-primary)}
+.hero-stat span{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
 
-  /* ── Theme toggle ── */
-  .theme-toggle {
-    margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle);
-    display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); cursor: pointer;
-  }
-  .theme-toggle:hover { color: var(--text-secondary); }
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin:24px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:12px 14px;text-align:left;vertical-align:top}
+th{background:var(--bg-elevated);color:var(--text-muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border)}
+td{border-bottom:1px solid var(--border-subtle);color:var(--text-secondary)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-hover)}
+.td-sbti{color:var(--sbti)}
+.td-esrs{color:var(--esrs)}
 
-  /* ── Sections ── */
-  section { padding: 64px 48px; max-width: 1100px; }
-  section + section { border-top: 1px solid var(--border-subtle); }
-  .section-label {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 12px; display: block;
-  }
-  h1 { font-size: 42px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
-  h2 { font-size: 28px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 16px; }
-  h3 { font-size: 18px; font-weight: 600; margin: 24px 0 10px; }
-  p { color: var(--text-secondary); margin-bottom: 14px; max-width: 720px; }
-  .lead { font-size: 17px; color: var(--text-secondary); max-width: 680px; margin-bottom: 28px; line-height: 1.6; }
-  .meta { font-size: 12px; color: var(--text-muted); margin-bottom: 32px; }
+.card-list{display:flex;flex-direction:column;gap:14px;margin:24px 0}
+.detail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all .2s ease;position:relative}
+.detail-card:hover{border-color:var(--accent)}
+.detail-card.open{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 32px var(--accent-glow)}
+.detail-card .card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.detail-card .card-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px}
+.detail-card .card-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.detail-card .card-lead{font-size:13px;color:var(--text-secondary)}
+.detail-card .card-body{display:none;font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:16px;margin-top:14px;line-height:1.65}
+.detail-card.open .card-body{display:block}
+.detail-card .card-body .quote{background:var(--bg-elevated);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--text-secondary);margin:12px 0}
+.detail-card .card-body .criterion-id{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:600;display:block;margin-bottom:6px;margin-top:16px}
+.detail-card .card-body p{margin-bottom:10px}
 
-  /* ── Hero ── */
-  #hero {
-    min-height: 70vh; display: flex; flex-direction: column; justify-content: center;
-    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 100%);
-  }
-  #hero .hero-stats { display: flex; gap: 40px; margin-top: 32px; }
-  .hero-stat strong { display: block; font-size: 24px; font-weight: 700; color: var(--text-primary); }
-  .hero-stat span { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
+.badge-green{background:rgba(34,197,94,0.12);color:var(--csrd);border:1px solid rgba(34,197,94,0.25)}
+.badge-amber{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)}
+.badge-red{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.35)}
+.badge-blue{background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.25)}
 
-  /* ── Tables ── */
-  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); margin: 24px 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { padding: 12px 14px; text-align: left; vertical-align: top; }
-  th { background: var(--bg-elevated); color: var(--text-muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
-  td { border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--bg-hover); }
-  .td-framework { font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .td-sbti { color: var(--sbti); }
-  .td-esrs { color: var(--esrs); }
-  .td-csrd { color: var(--csrd); }
+.checklist-table th{white-space:nowrap}
+.checklist-row td{font-size:12px}
+.checklist-row .action{color:var(--text-primary);font-weight:500}
+.checklist-row .ref{font-family:var(--font-mono);font-size:11px;color:var(--accent)}
+.checklist-row .owner{font-size:11px;color:var(--text-secondary)}
 
-  /* ── Cards / Flip detail ── */
-  .card-grid { display: grid; gap: 14px; margin: 24px 0; }
-  .card-grid.two { grid-template-columns: repeat(2, 1fr); }
-  .card-grid.three { grid-template-columns: repeat(3, 1fr); }
-  .detail-card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 20px; cursor: pointer; transition: all .2s ease; position: relative;
-  }
-  .detail-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .detail-card.open { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 8px 32px var(--accent-glow); }
-  .detail-card .card-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
-  .detail-card .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-  .detail-card .card-lead { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
-  .detail-card .card-body { display: none; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 14px; margin-top: 12px; }
-  .detail-card.open .card-body { display: block; }
-  .detail-card .card-body .quote { background: var(--bg-elevated); border-left: 3px solid var(--accent); padding: 12px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--text-secondary); margin: 10px 0; }
-  .detail-card .card-body .criterion-id { font-family: var(--font-mono); font-size: 11px; color: var(--accent); font-weight: 600; display: block; margin-bottom: 4px; }
+.explorer-bar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.explorer-bar input,.explorer-bar select{background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:var(--font-sans);outline:none;min-width:180px}
+.explorer-bar input:focus,.explorer-bar select:focus{border-color:var(--accent)}
 
-  /* ── Badges ── */
-  .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .badge-green { background: rgba(34,197,94,0.12); color: var(--csrd); border: 1px solid rgba(34,197,94,0.25); }
-  .badge-amber { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
-  .badge-red { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
-  .badge-blue { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
-  .badge-orange { background: rgba(249,115,22,0.12); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+.score-block{text-align:center;padding:24px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-card)}
+.score-block .score-num{font-size:36px;font-weight:700;line-height:1;margin-bottom:6px}
+.score-block .score-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
+.score-sbti .score-num{color:var(--sbti)}
+.score-esrs .score-num{color:var(--esrs)}
+.score-csrd .score-num{color:var(--csrd)}
 
-  /* ── Checklist ── */
-  .checklist-table th { white-space: nowrap; }
-  .checklist-row td { font-size: 12px; }
-  .checklist-row .action { color: var(--text-primary); font-weight: 500; }
-  .checklist-row .ref { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
+footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13px;color:var(--text-secondary);line-height:1.7;position:relative;z-index:1}
+.disclaimer-box{padding:18px 22px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);line-height:1.65;margin-top:20px}
+.disclaimer-box strong{color:var(--accent);display:block;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.08em}
 
-  /* ── Explorer ── */
-  .explorer-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-  .explorer-bar input, .explorer-bar select {
-    background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary);
-    padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-sans); outline: none; min-width: 180px;
-  }
-  .explorer-bar input:focus, .explorer-bar select:focus { border-color: var(--accent); }
-  .explorer-results { display: flex; flex-direction: column; gap: 10px; }
-  .explorer-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
-  .explorer-item .item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-  .explorer-item .item-type { font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
-  .type-criterion { background: var(--accent-soft); color: var(--accent); }
-  .type-rec { background: rgba(59,130,246,0.12); color: var(--sbti); }
-  .explorer-item .item-id { font-family: var(--font-mono); font-size: 12px; color: var(--accent); font-weight: 600; }
-  .explorer-item .item-chapter { font-size: 11px; color: var(--text-muted); }
-  .explorer-item .item-text { font-size: 13px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
-
-  /* ── Depth chart bars ── */
-  .depth-bar { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
-  .depth-label { width: 100px; font-size: 11px; color: var(--text-muted); text-align: right; flex-shrink: 0; }
-  .depth-track { flex: 1; height: 18px; background: var(--bg-elevated); border-radius: 4px; overflow: hidden; position: relative; }
-  .depth-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
-  .fill-sbti { background: var(--sbti); }
-  .fill-esrs { background: var(--esrs); }
-  .fill-csrd { background: var(--csrd); }
-  .depth-val { width: 20px; font-size: 11px; font-weight: 600; color: var(--text-primary); text-align: center; }
-
-  /* ── Score blocks ── */
-  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; }
-  .score-block { text-align: center; padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); }
-  .score-block .score-num { font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
-  .score-block .score-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .score-sbti .score-num { color: var(--sbti); }
-  .score-esrs .score-num { color: var(--esrs); }
-  .score-csrd .score-num { color: var(--csrd); }
-
-  /* ── Footer ── */
-  footer { padding: 40px 48px; border-top: 1px solid var(--border-subtle); font-size: 12px; color: var(--text-muted); }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
-
-  /* ── Responsive ── */
-  @media (max-width: 900px) {
-    .sidebar { display: none; }
-    .main { margin-left: 0; }
-    section { padding: 40px 20px; }
-    .card-grid.two, .card-grid.three { grid-template-columns: 1fr; }
-    .score-grid { grid-template-columns: 1fr; }
-  }
+@media (max-width:900px){section{padding:40px 20px} .topbar{padding:0 16px} .topbar-brand{display:none} .topbar-nav{gap:4px} .score-grid{grid-template-columns:1fr} #hero .hero-stats{flex-direction:column;gap:24px}}
 </style>
 </head>
 <body>
 
-<div class="app">
-  <!-- Sidebar Navigation -->
-  <aside class="sidebar">
-    <div class="brand">
-      Comparative Analysis
-      <strong>SBTi v2 vs ESRS E1</strong>
-    </div>
-
-    <nav class="nav" id="nav">
-      <a href="#hero" class="active"><span class="num">00</span> Overview</a>
-      <a href="#arch"><span class="num">01</span> Architecture</a>
-      <a href="#gov"><span class="num">02</span> Governance</a>
-      <a href="#targets"><span class="num">03</span> Targets</a>
-      <a href="#implement"><span class="num">04</span> Implementation</a>
-      <a href="#depth"><span class="num">05</span> Depth</a>
-      <a href="#matrix"><span class="num">06</span> Matrix</a>
-      <a href="#checklist"><span class="num">07</span> Checklist</a>
-      <a href="#explorer"><span class="num">08</span> Explorer</a>
-    </nav>
-
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-
-    <div class="theme-toggle" onclick="document.documentElement.toggleAttribute('data-theme');">
-      <span>Toggle light</span>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main" id="main">
-
-    <!-- 00 Hero -->
-    <section id="hero">
-      <h1>From ambition to action.</h1>
-      <p class="lead">
-        A structured interoperability and gap analysis between the SBTi Corporate Net-Zero Standard V2.0,
-        ESRS E1 Climate Change (Commission Delegated Regulation 2026/5010 Annex I), and the CSRD Voluntary
-        Annex (2026/5011) for undertakings below 1,000 employees.
-      </p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <strong>3</strong>
-          <span>Frameworks</span>
-        </div>
-        <div class="hero-stat">
-          <strong>18</strong>
-          <span>Themes</span>
-        </div>
-        <div class="hero-stat">
-          <strong>22</strong>
-          <span>Must-do actions</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 01 Architecture -->
-    <section id="arch">
-      <span class="section-label">01 · Architectural Overview</span>
-      <h2>Three frameworks, three logics.</h2>
-      <p class="lead">
-        SBTi is a voluntary private standard targeting science-based decarbonisation.
-        ESRS E1 is a mandatory EU disclosure standard under CSRD. The CSRD Delegated Act Annex is a voluntary, proportionate standard for undertakings below 1,000 employees.
-      </p>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Dimension</th>
-              <th class="td-sbti">SBTi CNZS V2.0</th>
-              <th class="td-esrs">ESRS E1 Climate Change</th>
-              <th class="td-csrd">CSRD Voluntary Annex</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Nature</strong></td>
-              <td>Private voluntary standard (UK charity)</td>
-              <td>Mandatory EU disclosure standard under CSRD</td>
-              <td>Voluntary proportionate standard for undertakings &lt;1,000 employees</td>
-            </tr>
-            <tr>
-              <td><strong>Legal force</strong></td>
-              <td>None directly; adopted by investors/CDP as condition</td>
-              <td>Legally binding for in-scope undertakings from FY2027</td>
-              <td>Voluntary; no legal obligation</td>
-            </tr>
-            <tr>
-              <td><strong>Core objective</strong></td>
-              <td>Set & validate GHG reduction targets aligned with 1.5°C net-zero by 2050</td>
-              <td>Disclose material climate-related impacts, risks, opportunities, targets & metrics</td>
-              <td>Support SMEs in providing comparable sustainability data to larger undertakings and financiers</td>
-            </tr>
-            <tr>
-              <td><strong>Scope 1/2/3 coverage</strong></td>
-              <td>Mandatory for Category A; intensity-only allowed for Category B Scope 1; Scope 3 ≥67% coverage required for Category A</td>
-              <td>Gross Scope 1, 2, 3 mandatory if material; scope 3 phased-in with reliefs</td>
-              <td>Basic Module requires Scope 1 + location-based Scope 2; Scope 3 encouraged for value chain</td>
-            </tr>
-            <tr>
-              <td><strong>Transition plan</strong></td>
-              <td>Mandatory for Category A; publish within 15 months of validation; review every 5 years</td>
-              <td>E1-1 requires disclosure of transition plan features; if none, disclose that fact</td>
-              <td>Comprehensive Module C3 asks for GHG reduction targets and climate transition actions</td>
-            </tr>
-            <tr>
-              <td><strong>Carbon credits / offsets</strong></td>
-              <td>Not allowed toward SBTi targets; neutralisation only for residual emissions post-net-zero</td>
-              <td>E1-9 requires disclosure of carbon credits used; cannot count toward GHG reduction targets (E1-6)</td>
-              <td>No explicit mention of carbon credits or offsetting in operative provisions</td>
-            </tr>
-            <tr>
-              <td><strong>Target ambition</strong></td>
-              <td>Near-term: 1.5°C or well-below 2°C pathway; Long-term: net-zero by 2050 latest</td>
-              <td>Targets must be gross (no removals/credits) and compatible with 1.5°C / EU climate neutrality 2050</td>
-              <td>Voluntary targets; no mandatory ambition benchmark</td>
-            </tr>
-            <tr>
-              <td><strong>Assurance</strong></td>
-              <td>Third-party validation required; limited assurance on GHG inventory; reasonable assurance on target implementation (phased)</td>
-              <td>Limited assurance required; reasonable assurance phased in over time</td>
-              <td>No assurance requirement</td>
-            </tr>
-            <tr>
-              <td><strong>Boundary approach</strong></td>
-              <td>Operational or financial control (GHG Protocol aligned)</td>
-              <td>Flexibility: operational or financial control (post-revision)</td>
-              <td>GHG Protocol aligned; consolidated reporting recommended</td>
-            </tr>
-            <tr>
-              <td><strong>Materiality</strong></td>
-              <td>Not used; all criteria apply regardless of materiality</td>
-              <td>Double materiality: disclose only material climate impacts, risks, opportunities</td>
-              <td>Proportionate; ‘if applicable’ principle; no full double-materiality assessment required</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 02 Governance -->
-    <section id="gov">
-      <span class="section-label">02 · Governance & Leadership Accountability</span>
-      <h2>Net-zero starts in the boardroom.</h2>
-      <p class="lead">
-        SBTi places the strongest governance obligations on companies. ESRS E1 embeds governance within the general disclosures (ESRS 2 GOV) rather than creating climate-specific board mandates. CSRD Voluntary Annex has no governance-specific disclosure beyond basic information.
-      </p>
-
-      <div class="card-grid two">
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Governance · CNZS-C1</div>
-          <div class="card-title">Board sign-off, not just sustainability sign-off</div>
-          <div class="card-lead">Your highest governing body must formally own SBTi targets.</div>
-          <div class="card-body">
-            <span class="criterion-id">C1.1</span>
-            <div class="quote">"The company's highest governing body (i.e., Board of Directors or equivalent) shall agree to assume overall accountability for SBTi targets, including setting and submitting targets for validation, and overseeing target implementation."</div>
-            <span class="criterion-id">C1.2</span>
-            <div class="quote">"Companies shall submit and report a description of the governance structures responsible for overseeing and implementing their targets."</div>
-            <span class="criterion-id">C1.3</span>
-            <div class="quote">"Companies shall establish documented processes for reporting progress, periodic review and adjustment of targets to reflect evolving science, company performance, and best practice."</div>
-            <p><strong>ESRS equivalent:</strong> ESRS 2 GOV-1 requires disclosure of governance structures but does not isolate climate-target accountability specifically.</p>
-            <p><strong>CSRD Voluntary:</strong> B1 only asks for governance body name — no equivalent depth.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Transition Plan · CNZS-C2</div>
-          <div class="card-title">A transition plan, due at validation</div>
-          <div class="card-lead">Every company needs a Board-approved plan describing how it will deliver targets.</div>
-          <div class="card-body">
-            <span class="criterion-id">C2.1</span>
-            <div class="quote">"Transition plans shall describe the actions and corresponding timeframes required to implement the company's targets in a manner consistent with reaching net-zero by no later than 2050."</div>
-            <span class="criterion-id">C2.2</span>
-            <div class="quote">"Transition plans shall be formally approved and adopted by the company's highest governing body."</div>
-            <span class="criterion-id">C2.4</span>
-            <div class="quote">"Category A companies shall publish a disclosure of their transition plan within 15 months of completing Target Validation."</div>
-            <p><strong>ESRS E1-1 para 12:</strong> Transition plan must include GHG targets, decarbonisation levers, key actions, investments and funding, board approval, and EU Climate Law alignment.</p>
-            <p><strong>ESRS E1-1 para 12(b):</strong> CapEx amounts for coal, oil and gas economic activities required — SBTi does not mandate this level of fossil-fuel disclosure.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Recommendation · R1.2</div>
-          <div class="card-title">Policy engagement consistency</div>
-          <div class="card-lead">Lobbying must align with climate targets.</div>
-          <div class="card-body">
-            <span class="criterion-id">R1.2</span>
-            <div class="quote">"Companies are recommended to ensure that public policy engagement, lobbying activities, and advocacy efforts are consistent with and supportive of their climate targets. Companies are recommended to follow best-practice frameworks such as InfluenceMap..."</div>
-            <p><strong>ESRS gap:</strong> ESRS 2 GDR-P covers climate-related policies but has no lobbying-specific requirement.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Recommendation · R2.3</div>
-          <div class="card-title">Transition plan alignment with ESRS</div>
-          <div class="card-lead">SBTi explicitly references ESRS E1-1 in its recommendations.</div>
-          <div class="card-body">
-            <span class="criterion-id">R2.3</span>
-            <div class="quote">"Companies are recommended to develop transition plans in line with international standards such as the Transition Planning Taskforce (TPT) Disclosure Framework. When applicable, companies must ensure compliance with applicable national or subnational regulatory frameworks, such as the disclosure requirements set out in ESRS E1-1 ('Transition plan for climate change mitigation')..."</div>
-            <p>This is a direct interoperability bridge: SBTi recommends alignment with ESRS E1-1 voluntarily.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 03 Targets -->
-    <section id="targets">
-      <span class="section-label">03 · Target Setting: Scope 1, 2, 3 & Net-Zero</span>
-      <h2>Where the frameworks diverge most sharply.</h2>
-      <p class="lead">
-        SBTi is prescriptive on ambition levels, methods, and coverage. ESRS E1 is disclosure-focused: it requires companies to report targets but does not mandate specific ambition levels. CSRD Voluntary Annex asks for targets without prescribing science-based pathways.
-      </p>
-
-      <div class="card-grid three">
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Scope 1 · C10–C11</div>
-          <div class="card-title">Absolute or intensity to residual</div>
-          <div class="card-body">
-            <span class="criterion-id">C10.1</span>
-            <div class="quote">"Near-term targets shall cover 100% of scope 1 emissions."</div>
-            <span class="criterion-id">C10.2</span>
-            <div class="quote">"Companies shall set one or more near-term targets using: a) Scope 1 absolute emissions reduction; b) Scope 1 emissions intensity reduction; c) Asset transition targets."</div>
-            <span class="criterion-id">C11.2</span>
-            <div class="quote">"Long-term targets shall cover 100% of scope 1 emissions."</div>
-            <p><strong>ESRS E1-6 para 24:</strong> "The undertaking shall disclose the GHG emission reduction targets it has set, including absolute GHG emission reduction targets for scopes 1, 2 and 3... specifying which scopes are covered."</p>
-            <p><strong>ESRS gap:</strong> No method prescription — only disclosure requirement.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Scope 2 · C12–C13 + C24</div>
-          <div class="card-title">Hourly matching introduced</div>
-          <div class="card-body">
-            <span class="criterion-id">C12.1</span>
-            <div class="quote">"Near-term targets shall cover 100% of scope 2 emissions."</div>
-            <span class="criterion-id">C12.2</span>
-            <div class="quote">"Companies shall set one or more near-term targets using: a) Low-carbon electricity alignment targets; b) Scope 2 absolute emissions reduction."</div>
-            <span class="criterion-id">C24.1</span>
-            <div class="quote">"Companies shall report a description of the activity pool-level or sector-level actions taken, including the relevant activity, system, or sector."</div>
-            <p><strong>ESRS E1-8 para 34:</strong> Location-based Scope 2 mandatory; market-based optional. No hourly matching requirement.</p>
-            <p><strong>SBTi advantage:</strong> Hourly matching (C24) is more granular than any ESRS requirement.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Scope 3 · C14–C16</div>
-          <div class="card-title">≥67% coverage for Category A</div>
-          <div class="card-body">
-            <span class="criterion-id">C14.1</span>
-            <div class="quote">"Near-term targets shall cover at least all scope 3 categories that individually represent 5% or more of the company's scope 3 emissions in categories 1–14."</div>
-            <span class="criterion-id">C16.1</span>
-            <div class="quote">"Long-term targets shall cover 100% of scope 3 emissions."</div>
-            <span class="criterion-id">C16.2</span>
-            <div class="quote">"Scope 3 long-term targets shall be set to reach residual levels in line with applicable net-zero pathways."</div>
-            <p><strong>ESRS E1-8 para 35:</strong> Scope 3 required if material, with phased-in reliefs for first-time reporters.</p>
-            <p><strong>Gap:</strong> SBTi ≥67% coverage threshold likely exceeds ESRS materiality threshold.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Net-Zero · C17</div>
-          <div class="card-title">Validated long-term target by 2050</div>
-          <div class="card-body">
-            <span class="criterion-id">C17.1</span>
-            <div class="quote">"Companies (including Category B companies) shall set near-term targets on scope 1, scope 2, and scope 3 emissions."</div>
-            <span class="criterion-id">C17.2</span>
-            <div class="quote">"Companies shall set long-term targets to reach residual scope 1, scope 2, and scope 3 emissions."</div>
-            <span class="criterion-id">C17.4</span>
-            <div class="quote">"To reach a state of net-zero, the company shall: a) Reduce scope 1, 2, and 3 emissions to zero or to a residual level consistent with eligible net-zero pathways; and b) Neutralize any residual emissions at the net-zero target date."</div>
-            <p><strong>ESRS E1-1 para 11:</strong> Transition plan must be compatible with limiting global warming to 1.5°C and achieving climate neutrality by 2050 per EU Climate Law (Regulation 2021/1119).</p>
-            <p><strong>ESRS gap:</strong> No explicit validated net-zero target mandate — only transition-plan compatibility.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Base Year · C4 + C8</div>
-          <div class="card-title">Most recent comprehensive year</div>
-          <div class="card-body">
-            <span class="criterion-id">C4.1</span>
-            <div class="quote">"Companies shall select the most recent year for which comprehensive emissions and other applicable data are available as the target base year for near-term targets."</div>
-            <span class="criterion-id">C8.3</span>
-            <div class="quote">"Companies shall apply a 5% significance threshold to determine whether recalculation is required."</div>
-            <p><strong>ESRS 1 Chapter 7:</strong> Comparative information required; restatements for acquisitions/divestments with phased reliefs.</p>
-            <p><strong>Gap:</strong> SBTi recalculation triggers are stricter (>5% threshold) than ESRS reliefs.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Target Revision · C20</div>
-          <div class="card-title">Trigger-based revision</div>
-          <div class="card-body">
-            <span class="criterion-id">C20.1</span>
-            <div class="quote">"If, following a target base year recalculation or other significant changes, targets are determined to be non-conformant, companies shall revise those targets and submit them for validation."</div>
-            <p><strong>ESRS 1 para 7.6:</strong> Restatement rules for major acquisitions/divestments — but no target-validation-driven revision requirement.</p>
-          </div>
-        </div>
-      </div>
-
-      <h3>ESRS E1-6 on targets — actual standard text</h3>
-      <div class="quote">
-        "The undertaking shall disclose the GHG emission reduction targets it has set, including: (a) absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where relevant in intensity value, specifying which scopes are covered and the share related to each; (b) if the scope diverges from the GHG inventory (E1-8), the percentages for scopes 1, 2 and 3 covered by the target; (c) a statement on whether targets are science-based and compatible with limiting global warming to 1.5°C, stating which framework/methodology was used..."
-      </div>
-      <p><strong>Interoperability note:</strong> SBTi-validated targets automatically satisfy ESRS E1-6 para 24(c) on science-based compatibility. Companies must simply reference their SBTi validation in the ESRS disclosure.</p>
-    </section>
-
-    <!-- 04 Implementation -->
-    <section id="implement">
-      <span class="section-label">04 · Implementation Hierarchy, Actions & Carbon Credits</span>
-      <h2>Direct abatement first, then market instruments.</h2>
-      <p class="lead">
-        SBTi V2.0 introduces a strict implementation hierarchy. ESRS E1-9 creates a disclosure requirement for carbon credits but explicitly bars their use toward GHG reduction targets. The CSRD Voluntary Annex does not address carbon credits in operative provisions.
-      </p>
-
-      <div class="card-grid two">
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Hierarchy · C21</div>
-          <div class="card-title">Activity → pool → sector</div>
-          <div class="card-body">
-            <span class="criterion-id">C21.1</span>
-            <div class="quote">"Companies shall document and demonstrate that activity-level actions have been assessed and implemented, where feasible, before relying on activity pool-level or sector-level actions."</div>
-            <span class="criterion-id">C21.2</span>
-            <div class="quote">"Where emissions arise within an activity pool, companies may take actions within the same activity pool from which the emissions-generating activity arises."</div>
-            <span class="criterion-id">C21.3</span>
-            <div class="quote">"Where sufficient action cannot be taken at the activity or activity pool level due to structural constraints, companies shall document constraints and may take action at the sector level."</div>
-            <p><strong>ESRS gap:</strong> No equivalent hierarchy in ESRS E1-5 (actions disclosure). SBTi C21 is unique among the three frameworks.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Carbon Credits · C25–C28</div>
-          <div class="card-title">Prohibited toward targets</div>
-          <div class="card-body">
-            <span class="criterion-id">C25.1</span>
-            <div class="quote">"Activity matching: Companies shall demonstrate that actions taken correspond to the same activity type, product, material, fuel, or energy source as the company's underlying activity."</div>
-            <span class="criterion-id">C26.2</span>
-            <div class="quote">"Excluded mechanisms: The following shall not be considered eligible for target implementation: a) Emissions reductions derived from hypothetical scenarios; b) Emissions reductions or removals, including GHG credits, used for the SBTi's Ongoing Emissions Responsibility program; c) GHG credits sold or otherwise transferred to a third party; d) Emissions reductions estimated ex ante and not yet realized."</div>
-            <p><strong>ESRS E1-6 AR 12:</strong> "The GHG emission reduction targets shall be gross targets, meaning that the undertaking shall not include GHG removals, carbon credits or avoided emissions as means of achieving the GHG emission reduction targets."</p>
-            <p><strong>ESRS E1-9 para 39–44:</strong> Requires granular disclosure of carbon credits purchased, cancelled, share from removal projects, and integrity standards used.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Bioenergy · C26</div>
-          <div class="card-title">Sustainability criteria for bio-based feedstocks</div>
-          <div class="card-body">
-            <span class="criterion-id">C26.1</span>
-            <div class="quote">"Companies shall account for and report forest, land, and agriculture (FLAG) emissions; bioenergy emissions; and both biogenic and technological removals in line with the GHG Protocol Land Sector and Removals Standard, ensuring separation of emissions and removals."</div>
-            <p><strong>ESRS E1-8 para 31:</strong> "The undertaking shall disclose its direct biogenic CO2 emissions from combustion or biodegradation of biomass separately from scope 1 GHG emissions."</p>
-            <p><strong>Gap:</strong> ESRS only requires separate reporting; SBTi requires chain-of-custody documentation and sustainability criteria.</p>
-          </div>
-        </div>
-
-        <div class="detail-card" onclick="this.classList.toggle('open')">
-          <div class="card-tag">Electricity · C29</div>
-          <div class="card-title">Electricity-specific hierarchy</div>
-          <div class="card-body">
-            <span class="criterion-id">C29.1</span>
-            <div class="quote">"Reduce demand → procure renewable → hourly matching."</div>
-            <p>SBTi C29 establishes an electricity-specific implementation hierarchy: reduce demand first, procure renewable energy second, apply hourly matching third. ESRS E1-8 has no electricity-specific hierarchy.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 Depth Comparison -->
-    <section id="depth">
-      <span class="section-label">05 · Coverage Depth Comparison</span>
-      <h2>Prescriptiveness mapped across 18 themes.</h2>
-      <p class="lead">
-        Scale 1–5 where 1 = minimal mention and 5 = prescriptive, granular requirements (thresholds, methods, timelines, validation rules). Scored by reading operative provisions line-by-line.
-      </p>
-
-      <div class="score-grid">
-        <div class="score-block score-sbti">
-          <div class="score-num">5.0</div>
-          <div class="score-label">SBTi avg (targets)</div>
-        </div>
-        <div class="score-block score-esrs">
-          <div class="score-num">3.2</div>
-          <div class="score-label">ESRS E1 avg</div>
-        </div>
-        <div class="score-block score-csrd">
-          <div class="score-num">1.4</div>
-          <div class="score-label">CSRD Vol avg</div>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Theme</th><th class="td-sbti">SBTi</th><th class="td-esrs">ESRS</th><th class="td-csrd">CSRD</th><th>Rationale</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Governance & accountability</td><td>5</td><td>3</td><td>1</td><td>SBTi mandates board-level accountability specifically for climate targets (C1.1). ESRS 2 GOV-1 covers general sustainability governance.</td></tr>
-            <tr><td>Transition plan detail</td><td>5</td><td>4</td><td>2</td><td>SBTi C2.1–C2.5 requires 15-month publication, 5-year review, decarbonisation levers, CapEx, dependencies.</td></tr>
-            <tr><td>Scope 1 target prescription</td><td>5</td><td>3</td><td>2</td><td>SBTi mandates absolute/intensity targets with sector-specific methods. ESRS requires disclosure only.</td></tr>
-            <tr><td>Scope 2 target prescription</td><td>5</td><td>3</td><td>2</td><td>SBTi C24 hourly matching exceeds ESRS E1-8 location/market-based requirement.</td></tr>
-            <tr><td>Scope 3 target prescription</td><td>5</td><td>3</td><td>1</td><td>SBTi C14–C16 mandates ≥67% coverage. ESRS is materiality-based. CSRD Voluntary encourages but does not mandate.</td></tr>
-            <tr><td>Net-zero target mandate</td><td>5</td><td>2</td><td>1</td><td>SBTi mandates validated long-term net-zero by 2050. ESRS references compatibility but does not mandate a standalone target.</td></tr>
-            <tr><td>Base year / recalculation</td><td>5</td><td>3</td><td>1</td><td>SBTi C4.1–C4.5 + C8.1–C8.7 strict recalculation triggers (>5%). ESRS offers phased reliefs.</td></tr>
-            <tr><td>Implementation hierarchy</td><td>5</td><td>1</td><td>1</td><td>SBTi C21 is unique: direct abatement first. ESRS discloses actions but prescribes no hierarchy.</td></tr>
-            <tr><td>Carbon credit integrity</td><td>4</td><td>2</td><td>1</td><td>SBTi C25–C28 sets Core Carbon Principles, Oxford Offsetting Principles, vintage limits. ESRS requires disclosure only.</td></tr>
-            <tr><td>Bioenergy / biomass</td><td>4</td><td>2</td><td>1</td><td>SBTi C26 requires chain-of-custody. ESRS E1-8 only separates biogenic CO2 from gross emissions.</td></tr>
-            <tr><td>Hourly matching (Scope 2)</td><td>5</td><td>1</td><td>1</td><td>SBTi C24 is the only framework with hourly matching for renewable electricity claims.</td></tr>
-            <tr><td>Third-party assurance</td><td>5</td><td>3</td><td>1</td><td>SBTi requires target validation + limited assurance + phased reasonable assurance. ESRS mandates limited assurance on full statement.</td></tr>
-            <tr><td>End-of-target-cycle assessment</td><td>5</td><td>1</td><td>1</td><td>SBTi C26.1–C26.7 requires formal end-of-cycle assessment. No equivalent in ESRS or CSRD Voluntary.</td></tr>
-            <tr><td>Ongoing emissions responsibility</td><td>4</td><td>2</td><td>1</td><td>SBTi OER programme and post-2035 responsibility are unique. ESRS E1-9 covers credits/removals disclosure only.</td></tr>
-            <tr><td>Double materiality</td><td>1</td><td>5</td><td>2</td><td>ESRS is built on double materiality (ESRS 1 Chapter 3). SBTi does not use materiality at all.</td></tr>
-            <tr><td>Financial effects / climate risk</td><td>2</td><td>4</td><td>2</td><td>ESRS E1-11 requires anticipated financial effects (physical & transition risks, stranded assets). SBTi has no equivalent.</td></tr>
-            <tr><td>Scenario analysis</td><td>2</td><td>4</td><td>1</td><td>ESRS E1-2 requires high-emission + 1.5°C scenarios. SBTi does not require scenario disclosure.</td></tr>
-            <tr><td>Comparative information / reliefs</td><td>2</td><td>4</td><td>3</td><td>ESRS 1 Chapter 7 + 10 has extensive transitional reliefs. SBTi has minimal reliefs.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 06 Matrix -->
-    <section id="matrix">
-      <span class="section-label">06 · Interoperability Assessment Matrix</span>
-      <h2>Where SBTi maps to ESRS, and where it does not.</h2>
-      <p class="lead">
-        Coverage rated: Full (✓), Partial (~), None (✗). The SBTi Criteria IDs allow direct traceability to the standard text.
-      </p>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>SBTi Section</th><th>SBTi Criteria IDs</th><th>ESRS E1 Ref</th><th>CSRD Vol Ref</th><th>Coverage</th><th>Gap / Commentary</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1.1 Leadership accountability</td><td>C1.1, C1.2, C1.3, R1.1, R1.2</td><td>ESRS 2 GOV-1; GOV-5</td><td>B1</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi mandates board-level accountability SPECIFICALLY for climate targets. ESRS 2 GOV-1 is general.</td></tr>
-            <tr><td>1.2 Transition plan</td><td>C2.1–C2.5, R2.1–R2.4</td><td>E1-1, paras 11–13; ESRS 2 SBM-3</td><td>C3</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi content maps directly to ESRS E1-1 para 12. R2.3 explicitly references ESRS E1-1.</td></tr>
-            <tr><td>2.1 Organisational boundaries</td><td>C3.1–C3.5</td><td>E1-8, para AR 19; ESRS 1 para 5.3</td><td>B3, para 33</td><td><span class="badge badge-green">✓ Full</span></td><td>Both GHG Protocol aligned. No gap.</td></tr>
-            <tr><td>2.2 Base year selection</td><td>C4.1–C4.5, R4.1</td><td>ESRS 1 Chapter 6; E1-6, para 24</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi recalculation rules (C8.1–C8.7, >5% trigger) are stricter than ESRS reliefs.</td></tr>
-            <tr><td>2.3 GHG inventory</td><td>C5.1–C5.11</td><td>E1-8, paras 30–38; E1-7</td><td>B3, paras 33–38</td><td><span class="badge badge-green">✓ Full</span></td><td>Category A companies automatically satisfy ESRS E1-8 and exceed CSRD Voluntary B3.</td></tr>
-            <tr><td>2.4 EIA identification</td><td>C6.1–C6.5</td><td>None explicitly</td><td>None</td><td><span class="badge badge-red">✗ None</span></td><td>EIA concept is SBTi-specific. ESRS captures indirectly via materiality assessment.</td></tr>
-            <tr><td>2.5 Third-party assurance</td><td>C7.1–C7.5</td><td>ESRS 1 para 8.2; E1-8; Directive 2013/34/EU Art 19a/29a</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi is more granular (target-specific). ESRS is statement-wide.</td></tr>
-            <tr><td>3.1 General target setting</td><td>C9.1–C9.10, R9.1, R9.2</td><td>ESRS 2 GDR-T, paras 50–54; E1-6, paras 24–29</td><td>C3</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi target attributes map directly to GDR-T and E1-6.</td></tr>
-            <tr><td>3.2 Scope 1 targets</td><td>C10.1–C10.4, C11.1–C11.4</td><td>E1-6, paras 24–29; E1-8</td><td>B3 + C3</td><td><span class="badge badge-green">✓ Full</span></td><td>ESRS requires gross scope 1 targets; SBTi provides validated targets that satisfy this.</td></tr>
-            <tr><td>3.3 Scope 2 targets</td><td>C12.1–C12.4, C13.1–C13.2</td><td>E1-6; E1-8</td><td>B3</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi hourly matching (C24) goes beyond ESRS. SBTi data automatically satisfies ESRS.</td></tr>
-            <tr><td>3.4 Scope 3 targets</td><td>C14.1–C14.3, C15.1–C15.4, C16.1–C16.3</td><td>E1-6; E1-8; ESRS 1 para AR 24</td><td>B3 (paras 49–52)</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi ≥67% coverage likely exceeds ESRS materiality threshold.</td></tr>
-            <tr><td>3.5 Net-zero targets</td><td>C17.1–C17.4, R17.1</td><td>E1-1; E1-6</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi mandates validated net-zero target. ESRS only requires transition plan compatibility.</td></tr>
-            <tr><td>3.6 Reporting target info</td><td>C18.1–C18.3, C19.1–C19.6</td><td>ESRS 2 GDR-T; E1-6; ESRS 1 Chapter 7</td><td>B1</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi annual reporting maps to ESRS annual sustainability statement.</td></tr>
-            <tr><td>3.7 Target revision</td><td>C20.1–C20.3</td><td>ESRS 1 para 7.6; para 5.4; E1-6</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi has explicit trigger-based revision criteria. ESRS has restatement rules but no validation-driven triggers.</td></tr>
-            <tr><td>4.1 Implementation hierarchy</td><td>C21.1–C21.3, R21.1</td><td>None</td><td>None</td><td><span class="badge badge-red">✗ None</span></td><td>SBTi C21 introduces a unique direct-abatement-first hierarchy. ESRS has no equivalent.</td></tr>
-            <tr><td>4.2 Actions & market instruments</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2</td><td>E1-5; E1-9, paras 39–44</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi sets detailed integrity criteria. ESRS requires disclosure but does not mandate integrity criteria.</td></tr>
-            <tr><td>4.3 Electricity hierarchy</td><td>C29.1, C29.2</td><td>None</td><td>None</td><td><span class="badge badge-red">✗ None</span></td><td>SBTi C29 is electricity-specific. ESRS E1-8 has no equivalent.</td></tr>
-            <tr><td>4.4 Hourly matching</td><td>C24.1, C24.2, C24.3</td><td>None</td><td>None</td><td><span class="badge badge-red">✗ None</span></td><td>SBTi C24 is the only framework with hourly matching for renewable electricity claims.</td></tr>
-            <tr><td>4.5 Bio-based feedstocks</td><td>C26.1–C26.7</td><td>E1-8 (biogenic CO2)</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi requires chain-of-custody and sustainability criteria. ESRS only requires separate reporting.</td></tr>
-            <tr><td>5.1 Tracking progress</td><td>C25.1–C25.7</td><td>ESRS 2 GDR-T; E1-6; E1-1</td><td>B1</td><td><span class="badge badge-green">✓ Full</span></td><td>SBTi annual progress reporting maps directly to ESRS GDR-T.</td></tr>
-            <tr><td>5.2 End-of-cycle assessment</td><td>C26.1–C26.7</td><td>None</td><td>None</td><td><span class="badge badge-red">✗ None</span></td><td>SBTi requires formal end-of-target-cycle assessment. No ESRS equivalent.</td></tr>
-            <tr><td>6.1–6.6 Ongoing emissions responsibility</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1</td><td>E1-9, paras 39–44; E1-6</td><td>None</td><td><span class="badge badge-amber">~ Partial</span></td><td>SBTi OER programme is unique. ESRS covers credits disclosure but not OER integrity criteria.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 07 Checklist -->
-    <section id="checklist">
-      <span class="section-label">07 · Gap-Action Checklist</span>
-      <h2>From SBTi compliance to ESRS readiness.</h2>
-      <p class="lead">
-        For companies already SBTi-compliant: what remains to be done. Each item maps to the specific ESRS disclosure requirement and indicates whether SBTi already covers it.
-      </p>
-
-      <div class="explorer-bar">
-        <input type="text" id="checkSearch" placeholder="Search actions..." oninput="filterChecklist()">
-        <select id="checkFilter" onchange="filterChecklist()">
-          <option value="">All priorities</option>
-          <option value="Must-do">Must-do</option>
-          <option value="Should-do">Should-do</option>
-        </select>
-        <select id="checkSBTI" onchange="filterChecklist()">
-          <option value="">All coverage</option>
-          <option value="Yes">SBTi already covers</option>
-          <option value="No">SBTi does not cover</option>
-          <option value="Partial">Partial coverage</option>
-        </select>
-      </div>
-
-      <div class="table-wrap">
-        <table id="checklistTable" class="checklist-table">
-          <thead>
-            <tr>
-              <th>#</th><th>Action</th><th>SBTi Covers?</th><th>ESRS Ref</th><th>Effort</th><th>Priority</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>1.1</td><td class="action">Conduct double materiality assessment for climate change</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS 1 Ch.3</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>1.2</td><td class="action">Document climate-related impacts on people and environment</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1 para 3.2.1</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>1.3</td><td class="action">Document climate-related financial risks and opportunities</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-2, paras 14–17</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="Yes"><td>1.4</td><td class="action">Obtain board-level governance disclosure for climate targets</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS 2 GOV-1</td><td>Low</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>1.5</td><td class="action">Align transition plan with EU Climate Law (Reg 2021/1119)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-1, para 11</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>1.6</td><td class="action">Disclose CapEx amounts for coal, oil and gas activities</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-1, para 12(b)</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>1.7</td><td class="action">Assess locked-in GHG emissions from key physical assets</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-1, para 12(d)</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>1.8</td><td class="action">Publish transition plan disclosure within 15 months</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-1, paras 11–13</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>2.1</td><td class="action">Perform climate-related scenario analysis</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-2, para 17</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>2.2</td><td class="action">Disclose scenario ranges, temperature projections, assumptions</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-2, para 17</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>2.3</td><td class="action">Assess and disclose climate resilience of strategy</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-3, para 19</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="No"><td>2.4</td><td class="action">Disclose significant areas of uncertainty in resilience</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-3, para 19(b)</td><td>Low</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>3.1</td><td class="action">Report gross Scope 1, 2, 3 GHG emissions in tCO2eq</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-8, paras 30–38</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>3.2</td><td class="action">Report location-based AND market-based Scope 2</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-8, para 34</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>3.3</td><td class="action">Report Scope 3 emissions for all significant categories</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-8, para 35</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>3.4</td><td class="action">Disclose GHG reduction targets with base year, target year</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-6, paras 24–29</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>3.5</td><td class="action">State whether targets are science-based and 1.5°C compatible</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-6, para 24(a)</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>3.6</td><td class="action">Disclose energy consumption by source (renewable, fossil)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-7</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>3.7</td><td class="action">Report comparative information (prior-year emissions)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, Ch.7.1</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>3.8</td><td class="action">Restate base year for structural changes (M&A)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, paras 7.6, 5.4</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>4.1</td><td class="action">Disclose carbon credits purchased and cancelled</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-9, paras 39–44</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>4.2</td><td class="action">Disclose share of carbon credits from removal projects</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-9, para 40</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>4.3</td><td class="action">Disclose integrity standards used for carbon credits</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-9, para 41</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>4.4</td><td class="action">Ensure credits are NOT counted toward GHG targets</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-6, para 24</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="Partial"><td>4.5</td><td class="action">Report GHG removals separately from gross emissions</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-9, para 42</td><td>Medium</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>5.1</td><td class="action">Disclose decarbonisation levers and corresponding actions</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-5, para 25</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>5.2</td><td class="action">Disclose anticipated financial resources (CapEx/OpEx)</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-5, para 25; E1-1, para 12</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>5.3</td><td class="action">Report achieved and expected GHG reduction by lever</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">E1-5, para 26</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>5.4</td><td class="action">Disclose adaptation actions and resilience contribution</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-5, para 27</td><td>Medium</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>6.1</td><td class="action">Quantify anticipated financial effects from physical risks</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-11, para 36</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="No"><td>6.2</td><td class="action">Quantify anticipated financial effects from transition risks</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-11, para 37</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="No"><td>6.3</td><td class="action">Disclose real-estate collateral by energy-efficiency class</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-11, para 38</td><td>Medium</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="No"><td>6.4</td><td class="action">Disclose stranded asset risks and write-downs</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-11, para 37; E1-3, para 19</td><td>High</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Partial"><td>7.1</td><td class="action">Obtain limited assurance on ESRS sustainability statement</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, para 8.2; Dir 2013/34/EU Art 19a/29a</td><td>High</td><td><span class="badge badge-red">Must-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Should-do" data-sbti="Partial"><td>7.2</td><td class="action">Prepare for reasonable assurance on ESRS statement (phased)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, para 8.2</td><td>High</td><td><span class="badge badge-amber">Should-do</span></td></tr>
-            <tr class="checklist-row" data-priority="Must-do" data-sbti="Yes"><td>7.3</td><td class="action">Ensure transition plan reviewed every 5 years AND updated for ESRS</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-1, para 13</td><td>Low</td><td><span class="badge badge-red">Must-do</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p style="margin-top:24px; font-size:13px; color:var(--text-muted);">
-        <strong>Summary:</strong> 22 Must-do actions (~24–30 person-months) · 6 Should-do actions (~6–10 person-months) ·
-        8 actions already fully covered by SBTi (~2–4 person-months formatting only).
-      </p>
-    </section>
-
-    <!-- 08 Explorer -->
-    <section id="explorer">
-      <span class="section-label">08 · Standard Text Explorer</span>
-      <h2>Search the operative provisions.</h2>
-      <p class="lead">
-        Full-text search across SBTi criteria and recommendations, ESRS E1 disclosure requirements, and CSRD Voluntary Annex provisions extracted from the source documents.
-      </p>
-
-      <div class="explorer-bar">
-        <input type="text" id="expSearch" placeholder="Search criteria, keywords, IDs..." oninput="runExplorer()" style="flex:1;min-width:260px;">
-        <select id="expType" onchange="runExplorer()">
-          <option value="">All types</option>
-          <option value="Criterion">Criterion only</option>
-          <option value="Recommendation">Recommendation only</option>
-        </select>
-        <select id="expSource" onchange="runExplorer()">
-          <option value="">All sources</option>
-          <option value="sbti">SBTi CNZS</option>
-          <option value="esrs">ESRS E1</option>
-          <option value="csrd">CSRD Voluntary</option>
-        </select>
-      </div>
-
-      <div class="explorer-results" id="explorerResults"></div>
-    </section>
-
-    <footer>
-      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 900px;">
-        <div>
-          Built for comparative analysis. Source documents: SBTi Corporate Net-Zero Standard V2.0 (June 2026); Revised ESRS June 2026 (Delegated Regulation C(2026) 5010); CSRD Delegated Regulation (EU) 2026/5011 Annex. Scores are qualitative judgments grounded in line-by-line operative text reading. No marketing claims — every assertion traceable to criterion ID, article, or paragraph reference.
-        </div>
-        <div style="padding: 16px 20px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-          <strong style="color: var(--accent); display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Disclaimer</strong>
-          This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual documents to understand the details with the right context. This tool is designed for directional guidance only and is not a substitute for professional legal or compliance advice.
-        </div>
-      </div>
-    </footer>
-  </main>
+<div class="particles" id="particles">
+    <div class="particle" style="left:0.0%;width:2px;height:2px;animation-duration:15s;animation-delay:-0.0s;"></div>
+    <div class="particle" style="left:5.3%;width:4px;height:4px;animation-duration:19s;animation-delay:-1.3s;"></div>
+    <div class="particle" style="left:10.5%;width:6px;height:6px;animation-duration:23s;animation-delay:-2.6s;"></div>
+    <div class="particle" style="left:15.8%;width:2px;height:2px;animation-duration:27s;animation-delay:-3.9s;"></div>
+    <div class="particle" style="left:21.1%;width:4px;height:4px;animation-duration:31s;animation-delay:-5.2s;"></div>
+    <div class="particle" style="left:26.3%;width:6px;height:6px;animation-duration:15s;animation-delay:-6.5s;"></div>
+    <div class="particle" style="left:31.6%;width:2px;height:2px;animation-duration:19s;animation-delay:-7.8s;"></div>
+    <div class="particle" style="left:36.8%;width:4px;height:4px;animation-duration:23s;animation-delay:-9.1s;"></div>
+    <div class="particle" style="left:42.1%;width:6px;height:6px;animation-duration:27s;animation-delay:-10.4s;"></div>
+    <div class="particle" style="left:47.4%;width:2px;height:2px;animation-duration:31s;animation-delay:-11.7s;"></div>
+    <div class="particle" style="left:52.6%;width:4px;height:4px;animation-duration:15s;animation-delay:-13.0s;"></div>
+    <div class="particle" style="left:57.9%;width:6px;height:6px;animation-duration:19s;animation-delay:-14.3s;"></div>
+    <div class="particle" style="left:63.2%;width:2px;height:2px;animation-duration:23s;animation-delay:-15.6s;"></div>
+    <div class="particle" style="left:68.4%;width:4px;height:4px;animation-duration:27s;animation-delay:-16.9s;"></div>
+    <div class="particle" style="left:73.7%;width:6px;height:6px;animation-duration:31s;animation-delay:-18.2s;"></div>
+    <div class="particle" style="left:78.9%;width:2px;height:2px;animation-duration:15s;animation-delay:-19.5s;"></div>
+    <div class="particle" style="left:84.2%;width:4px;height:4px;animation-duration:19s;animation-delay:-0.8s;"></div>
+    <div class="particle" style="left:89.5%;width:6px;height:6px;animation-duration:23s;animation-delay:-2.1s;"></div>
+    <div class="particle" style="left:94.7%;width:2px;height:2px;animation-duration:27s;animation-delay:-3.4s;"></div>
+    <div class="particle" style="left:100.0%;width:4px;height:4px;animation-duration:31s;animation-delay:-4.7s;"></div>
+    <div class="particle-orb" style="left:5.0%;width:40px;height:40px;animation-duration:20s;animation-delay:-0.0s;"></div>
+    <div class="particle-orb" style="left:16.1%;width:70px;height:70px;animation-duration:26s;animation-delay:-2.5s;"></div>
+    <div class="particle-orb" style="left:27.2%;width:100px;height:100px;animation-duration:32s;animation-delay:-5.0s;"></div>
+    <div class="particle-orb" style="left:38.3%;width:130px;height:130px;animation-duration:38s;animation-delay:-7.5s;"></div>
+    <div class="particle-orb" style="left:49.4%;width:160px;height:160px;animation-duration:20s;animation-delay:-10.0s;"></div>
+    <div class="particle-orb" style="left:60.6%;width:40px;height:40px;animation-duration:26s;animation-delay:-12.5s;"></div>
+    <div class="particle-orb" style="left:71.7%;width:70px;height:70px;animation-duration:32s;animation-delay:-15.0s;"></div>
+    <div class="particle-orb" style="left:82.8%;width:100px;height:100px;animation-duration:38s;animation-delay:-17.5s;"></div>
+    <div class="particle-orb" style="left:93.9%;width:130px;height:130px;animation-duration:20s;animation-delay:-20.0s;"></div>
+    <div class="particle-orb" style="left:105.0%;width:160px;height:160px;animation-duration:26s;animation-delay:-22.5s;"></div>
 </div>
+<header class="topbar" id="topbar">
+  <div class="topbar-brand">SBTi <span>vs</span> ESRS</div>
+  <nav class="topbar-nav">
+    <a href="#arch" class="active"><span class="num">01</span> Overview</a>
+    <a href="#gov"><span class="num">02</span> Governance</a>
+    <a href="#targets"><span class="num">03</span> Targets</a>
+    <a href="#implementation"><span class="num">04</span> Implementation</a>
+    <a href="#depth"><span class="num">05</span> Depth</a>
+    <a href="#matrix"><span class="num">06</span> Matrix</a>
+    <a href="#checklist"><span class="num">07</span> Checklist</a>
+    <a href="#practical"><span class="num">08</span> Implications</a>
+    <a href="sbti-map.html">SBTi Map</a>
+    <a href="esrs-map.html">ESRS Map</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="theme-btn" onclick="var h=document.documentElement;var t=h.getAttribute('data-theme');h.setAttribute('data-theme', t==='light'?'dark':'light');this.textContent=t==='light'?'Light':'Dark';">Light</button>
+  </div>
+</header>
+
+<main>
+
+<!-- 00 Hero -->
+<section id="hero">
+  <h1>From ambition to action.</h1>
+  <p class="lead">A structured interoperability and gap analysis between the SBTi Corporate Net-Zero Standard V2.0,
+    ESRS E1 Climate Change &amp; CSRD Voluntary Annex for undertakings below 1,000 employees.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>2</strong><span>Frameworks</span></div>
+    <div class="hero-stat"><strong>24</strong><span>Themes</span></div>
+    <div class="hero-stat"><strong>52</strong><span>Actions</span></div>
+  </div>
+</section>
+
+<!-- 01 Architecture -->
+<section id="arch">
+  <span class="section-label">01 · Architectural Overview</span>
+  <h2>Two frameworks, two logics.</h2>
+  <p class="lead">SBTi is a voluntary private standard targeting science-based decarbonisation.
+    ESRS E1 is a mandatory EU disclosure standard under CSRD, supplemented by the CSRD Voluntary Annex for undertakings below 1,000 employees.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th class="td-sbti">SBTi CNZS V2.0</th><th class="td-esrs">ESRS E1 &amp; CSRD Voluntary</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nature</strong></td><td>Private voluntary standard (UK charity)</td><td>E1: Mandatory EU disclosure under CSRD. Annex: Proportionate voluntary for undertakings &lt;1,000 employees</td></tr>
+        <tr><td><strong>Legal force</strong></td><td>None directly; adopted by investors/CDP as condition</td><td>E1: Legally binding from FY2027. Annex: Voluntary; no legal obligation</td></tr>
+        <tr><td><strong>Core objective</strong></td><td>Set &amp; validate GHG reduction targets aligned with 1.5°C net-zero by 2050</td><td>E1: Disclose material climate impacts, risks, opportunities, targets &amp; metrics. Annex: Support SMEs in providing comparable data</td></tr>
+        <tr><td><strong>Scope 1/2/3 coverage</strong></td><td>Mandatory for Category A; Scope 3 ≥67% coverage for Category A</td><td>E1: Gross Scope 1, 2, 3 mandatory if material; scope 3 phased-in. Annex: Basic Module requires Scope 1 + location-based Scope 2; Scope 3 encouraged</td></tr>
+        <tr><td><strong>Transition plan</strong></td><td>Mandatory for Category A; publish within 15 months of validation; review every 5 years</td><td>E1-1: requires disclosure of transition plan features. Annex C3: GHG reduction targets and climate transition actions</td></tr>
+        <tr><td><strong>Carbon credits / offsets</strong></td><td>Not allowed toward SBTi targets; neutralisation only for residual emissions post-net-zero</td><td>E1-9: requires disclosure; cannot count toward GHG reduction targets (E1-6). Annex: no explicit mention</td></tr>
+        <tr><td><strong>Target ambition</strong></td><td>Near-term: 1.5°C or well-below 2°C pathway; Long-term: net-zero by 2050 latest</td><td>E1: Targets must be gross and compatible with 1.5°C / EU climate neutrality 2050. Annex: no mandatory ambition benchmark</td></tr>
+        <tr><td><strong>Assurance</strong></td><td>Third-party validation required; limited assurance on GHG inventory; reasonable assurance on target implementation (phased)</td><td>E1: Limited assurance required; reasonable assurance phased in. Annex: No assurance requirement</td></tr>
+        <tr><td><strong>Boundary approach</strong></td><td>Operational or financial control (GHG Protocol aligned)</td><td>E1: Flexibility: operational or financial control (post-revision). Annex: GHG Protocol aligned; consolidated recommended</td></tr>
+        <tr><td><strong>Materiality</strong></td><td>Not used; all criteria apply regardless of materiality</td><td>E1: Double materiality: disclose only material climate impacts, risks, opportunities. Annex: 'if applicable' principle; no full double-materiality assessment</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 02 Governance -->
+<section id="gov">
+  <span class="section-label">02 · Governance &amp; Leadership Accountability</span>
+  <h2>Net-zero starts in the boardroom.</h2>
+  <p class="lead">SBTi places the strongest governance obligations on companies. ESRS E1 embeds governance within ESRS 2 GOV. The CSRD Voluntary Annex has no governance-specific disclosure beyond basic information.</p>
+
+  <div class="card-list">
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Governance · CNZS-C1</div>
+        <div class="card-title">Board sign-off, not just sustainability sign-off</div>
+        <div class="card-lead">Your highest governing body must formally own SBTi targets.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C1.1</span>
+        <div class="quote">"The company's highest governing body (i.e., Board of Directors or equivalent) shall agree to assume overall accountability for SBTi targets, including setting and submitting targets for validation, and overseeing target implementation."</div>
+        <span class="criterion-id">C1.2</span>
+        <div class="quote">"Companies shall submit and report a description of the governance structures responsible for overseeing and implementing their targets."</div>
+        <span class="criterion-id">C1.3</span>
+        <div class="quote">"Companies shall establish documented processes for reporting progress, periodic review and adjustment of targets to reflect evolving science, company performance, and best practice."</div>
+        <p><strong>ESRS E1 equivalent:</strong> ESRS 2 GOV-1 requires disclosure of governance structures but does not isolate climate-target accountability.</p>
+        <p><strong>CSRD Voluntary:</strong> B1 only asks for governance body name — no equivalent depth.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Transition Plan · CNZS-C2</div>
+        <div class="card-title">A transition plan, due at validation</div>
+        <div class="card-lead">Every company needs a Board-approved plan describing how it will deliver targets.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C2.1</span>
+        <div class="quote">"Transition plans shall describe the actions and corresponding timeframes required to implement the company's targets in a manner consistent with reaching net-zero by no later than 2050."</div>
+        <span class="criterion-id">C2.2</span>
+        <div class="quote">"Transition plans shall be formally approved and adopted by the company's highest governing body."</div>
+        <span class="criterion-id">C2.4</span>
+        <div class="quote">"Category A companies shall publish a disclosure of their transition plan within 15 months of completing Target Validation."</div>
+        <p><strong>ESRS E1-1 para 12:</strong> Transition plan must include GHG targets, decarbonisation levers, key actions, investments and funding, board approval, and EU Climate Law alignment.</p>
+        <p><strong>ESRS E1-1 para 12(b):</strong> CapEx amounts for coal, oil and gas required — SBTi does not mandate this level of fossil-fuel disclosure.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Recommendation · R1.2</div>
+        <div class="card-title">Policy engagement consistency</div>
+        <div class="card-lead">Lobbying must align with climate targets.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">R1.2</span>
+        <div class="quote">"Companies are recommended to ensure that public policy engagement, lobbying activities, and advocacy efforts are consistent with and supportive of their climate targets. Companies are recommended to follow best-practice frameworks such as InfluenceMap..."</div>
+        <p><strong>ESRS gap:</strong> ESRS 2 GDR-P covers climate-related policies but has no lobbying-specific requirement.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Recommendation · R2.3</div>
+        <div class="card-title">Transition plan alignment with ESRS</div>
+        <div class="card-lead">SBTi explicitly references ESRS E1-1 in its recommendations.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">R2.3</span>
+        <div class="quote">"Companies are recommended to develop transition plans in line with international standards such as the Transition Planning Taskforce (TPT) Disclosure Framework. When applicable, companies must ensure compliance with applicable national or subnational regulatory frameworks, such as the disclosure requirements set out in ESRS E1-1..."</div>
+        <p>This is a direct interoperability bridge: SBTi recommends alignment with ESRS E1-1 voluntarily.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Targets -->
+<section id="targets">
+  <span class="section-label">03 · Target Setting: Scope 1, 2, 3 &amp; Net-Zero</span>
+  <h2>Where the frameworks diverge most sharply.</h2>
+  <p class="lead">SBTi is prescriptive on ambition levels, methods, and coverage. ESRS E1 is disclosure-focused: it requires companies to report targets but does not mandate specific ambition levels.</p>
+
+  <div class="card-list">
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Scope 1 · C10–C11</div>
+        <div class="card-title">Absolute or intensity to residual</div>
+        <div class="card-lead">Near-term targets must cover 100% of Scope 1 emissions.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C10.1</span><div class="quote">"Near-term targets shall cover 100% of scope 1 emissions."</div>
+        <span class="criterion-id">C10.2</span><div class="quote">"Companies shall set one or more near-term targets using: a) Scope 1 absolute emissions reduction; b) Scope 1 emissions intensity reduction; c) Asset transition targets."</div>
+        <span class="criterion-id">C11.2</span><div class="quote">"Long-term targets shall cover 100% of scope 1 emissions."</div>
+        <p><strong>ESRS E1-6 para 24:</strong> "The undertaking shall disclose the GHG emission reduction targets it has set, including absolute GHG emission reduction targets for scopes 1, 2 and 3..."</p>
+        <p><strong>ESRS gap:</strong> No method prescription — only disclosure requirement.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Scope 2 · C12–C13 + C24</div>
+        <div class="card-title">Hourly matching introduced</div>
+        <div class="card-lead">Scope 2 near-term target required with hourly matching option.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C12.1</span><div class="quote">"Near-term targets shall cover 100% of scope 2 emissions."</div>
+        <span class="criterion-id">C12.2</span><div class="quote">"Companies shall set one or more near-term targets using: a) Low-carbon electricity alignment targets; b) Scope 2 absolute emissions reduction."</div>
+        <span class="criterion-id">C24.1</span><div class="quote">"Companies shall report a description of the activity pool-level or sector-level actions taken..."</div>
+        <p><strong>ESRS E1-8 para 34:</strong> Location-based Scope 2 mandatory; market-based optional. No hourly matching requirement.</p>
+        <p><strong>SBTi advantage:</strong> Hourly matching (C24) is more granular than any ESRS requirement.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Scope 3 · C14–C16</div>
+        <div class="card-title">≥67% coverage for Category A</div>
+        <div class="card-lead">Category A companies must cover at least 67% of Scope 3 emissions.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C14.1</span><div class="quote">"Near-term targets shall cover at least all scope 3 categories that individually represent 5% or more of the company's scope 3 emissions in categories 1–14."</div>
+        <span class="criterion-id">C16.1</span><div class="quote">"Long-term targets shall cover 100% of scope 3 emissions."</div>
+        <span class="criterion-id">C16.2</span><div class="quote">"Scope 3 long-term targets shall be set to reach residual levels in line with applicable net-zero pathways."</div>
+        <p><strong>ESRS E1-8 para 35:</strong> Scope 3 required if material, with phased-in reliefs.</p>
+        <p><strong>Gap:</strong> SBTi ≥67% coverage threshold likely exceeds ESRS materiality threshold.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Net-Zero · C17</div>
+        <div class="card-title">Validated long-term target by 2050</div>
+        <div class="card-lead">Companies must set long-term targets to reach residual emissions and neutralise any remainder.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C17.1</span><div class="quote">"Companies (including Category B companies) shall set near-term targets on scope 1, scope 2, and scope 3 emissions."</div>
+        <span class="criterion-id">C17.2</span><div class="quote">"Companies shall set long-term targets to reach residual scope 1, scope 2, and scope 3 emissions."</div>
+        <span class="criterion-id">C17.4</span><div class="quote">"To reach a state of net-zero, the company shall: a) Reduce scope 1, 2, and 3 emissions to zero or to a residual level consistent with eligible net-zero pathways; and b) Neutralize any residual emissions at the net-zero target date."</div>
+        <p><strong>ESRS E1-1 para 11:</strong> Transition plan must be compatible with limiting global warming to 1.5°C and achieving climate neutrality by 2050 per EU Climate Law.</p>
+        <p><strong>ESRS gap:</strong> No explicit validated net-zero target mandate — only transition-plan compatibility.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Base Year · C4 + C8</div>
+        <div class="card-title">Most recent comprehensive year</div>
+        <div class="card-lead">Base year selection with 5% significance threshold for recalculation.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C4.1</span><div class="quote">"Companies shall select the most recent year for which comprehensive emissions and other applicable data are available as the target base year for near-term targets."</div>
+        <span class="criterion-id">C8.3</span><div class="quote">"Companies shall apply a 5% significance threshold to determine whether recalculation is required."</div>
+        <p><strong>ESRS 1 Chapter 7:</strong> Comparative information required; restatements for acquisitions/divestments with phased reliefs.</p>
+        <p><strong>Gap:</strong> SBTi recalculation triggers are stricter (&gt;5% threshold) than ESRS reliefs.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Target Revision · C20</div>
+        <div class="card-title">Trigger-based revision</div>
+        <div class="card-lead">If targets are non-conformant after recalculation, they must be revised and resubmitted.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C20.1</span><div class="quote">"If, following a target base year recalculation or other significant changes, targets are determined to be non-conformant, companies shall revise those targets and submit them for validation."</div>
+        <p><strong>ESRS 1 para 7.6:</strong> Restatement rules for major acquisitions/divestments — but no target-validation-driven revision requirement.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>ESRS E1-6 on targets — actual standard text</h3>
+  <div class="quote">"The undertaking shall disclose the GHG emission reduction targets it has set, including: (a) absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where relevant in intensity value, specifying which scopes are covered and the share related to each; (b) if the scope diverges from the GHG inventory (E1-8), the percentages for scopes 1, 2 and 3 covered by the target; (c) a statement on whether targets are science-based and compatible with limiting global warming to 1.5°C, stating which framework/methodology was used..."</div>
+  <p><strong>Interoperability note:</strong> SBTi-validated targets automatically satisfy ESRS E1-6 para 24(c). Companies must simply reference their SBTi validation in the ESRS disclosure.</p>
+</section>
+
+<!-- 04 Implementation -->
+<section id="implement">
+  <span class="section-label">04 · Implementation Hierarchy, Actions &amp; Carbon Credits</span>
+  <h2>Direct abatement first, then market instruments.</h2>
+  <p class="lead">SBTi V2.0 introduces a strict implementation hierarchy. ESRS E1-9 creates a disclosure requirement for carbon credits but explicitly bars their use toward GHG reduction targets.</p>
+
+  <div class="card-list">
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Hierarchy · C21</div>
+        <div class="card-title">Activity → pool → sector</div>
+        <div class="card-lead">Document that direct abatement has been assessed and implemented before relying on pool or sector-level actions.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C21.1</span><div class="quote">"Companies shall document and demonstrate that activity-level actions have been assessed and implemented, where feasible, before relying on activity pool-level or sector-level actions."</div>
+        <span class="criterion-id">C21.2</span><div class="quote">"Where emissions arise within an activity pool, companies may take actions within the same activity pool from which the emissions-generating activity arises."</div>
+        <span class="criterion-id">C21.3</span><div class="quote">"Where sufficient action cannot be taken at the activity or activity pool level due to structural constraints, companies shall document constraints and may take action at the sector level."</div>
+        <p><strong>ESRS gap:</strong> No equivalent hierarchy in ESRS E1-5. SBTi C21 is unique among the frameworks.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Carbon Credits · C25–C28</div>
+        <div class="card-title">Prohibited toward targets</div>
+        <div class="card-lead">Carbon credits cannot count toward SBTi targets. ESRS E1-9 requires granular credit disclosure.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C25.1</span><div class="quote">"Activity matching: Companies shall demonstrate that actions taken correspond to the same activity type, product, material, fuel, or energy source as the company's underlying activity."</div>
+        <span class="criterion-id">C26.2</span><div class="quote">"Excluded mechanisms: The following shall not be considered eligible for target implementation: a) Emissions reductions derived from hypothetical scenarios; b) Emissions reductions or removals, including GHG credits, used for the SBTi's Ongoing Emissions Responsibility program; c) GHG credits sold or otherwise transferred to a third party; d) Emissions reductions estimated ex ante and not yet realized."</div>
+        <p><strong>ESRS E1-6 AR 12:</strong> "The GHG emission reduction targets shall be gross targets, meaning that the undertaking shall not include GHG removals, carbon credits or avoided emissions as means of achieving the GHG emission reduction targets."</p>
+        <p><strong>ESRS E1-9 paras 39–44:</strong> Requires granular disclosure of carbon credits purchased, cancelled, share from removal projects, and integrity standards used.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Bioenergy · C26</div>
+        <div class="card-title">Sustainability criteria for bio-based feedstocks</div>
+        <div class="card-lead">No net carbon accounting assumptions. Chain-of-custody documentation required.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C26.1</span><div class="quote">"Companies shall account for and report forest, land, and agriculture (FLAG) emissions; bioenergy emissions; and both biogenic and technological removals in line with the GHG Protocol Land Sector and Removals Standard, ensuring separation of emissions and removals."</div>
+        <p><strong>ESRS E1-8 para 31:</strong> "The undertaking shall disclose its direct biogenic CO2 emissions from combustion or biodegradation of biomass separately from scope 1 GHG emissions."</p>
+        <p><strong>Gap:</strong> ESRS only requires separate reporting; SBTi requires chain-of-custody documentation and sustainability criteria.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Electricity · C29</div>
+        <div class="card-title">Electricity-specific hierarchy</div>
+        <div class="card-lead">Reduce demand first, procure renewable second, apply hourly matching third.</div>
+      </div></div>
+      <div class="card-body">
+        <span class="criterion-id">C29.1</span><div class="quote">"Reduce demand → procure renewable → hourly matching."</div>
+        <p>SBTi C29 establishes an electricity-specific implementation hierarchy: reduce demand first, procure renewable energy second, apply hourly matching third. ESRS E1-8 has no electricity-specific hierarchy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Depth Comparison -->
+<section id="depth">
+  <span class="section-label">05 · Coverage Depth Comparison</span>
+  <h2>24 themes scored on a 1–5 depth scale.</h2>
+  <p class="lead">1 = minimal mention (passing reference or absence). 5 = prescriptive, granular requirements (specific thresholds, methods, timelines, validation rules). Scores derived by reading operative provisions line-by-line across all source documents.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Theme</th><th class="td-sbti">SBTi Depth</th><th class="td-esrs">ESRS Depth</th><th>Rationale / Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Governance &amp; accountability</strong></td><td>5</td><td>3</td><td>SBTi mandates board-level accountability specifically for climate targets (C1.1). ESRS 2 GOV-1 covers general sustainability governance.</td></tr>
+        <tr><td><strong>Transition plan detail</strong></td><td>5</td><td>4</td><td>SBTi C2.1–C2.5: 15-month publication, 5-year review, decarbonisation levers. ESRS E1-1 is detailed but does not prescribe ambition.</td></tr>
+        <tr><td><strong>Scope 1 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C10–C11 mandates absolute/intensity targets with sector-specific methods. ESRS E1-6 requires disclosure, not method prescription.</td></tr>
+        <tr><td><strong>Scope 2 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C12–C13 + C24 hourly matching exceeds ESRS E1-8 location/market-based requirement.</td></tr>
+        <tr><td><strong>Scope 3 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C14–C16 mandates ≥67% coverage threshold. ESRS E1-8 is materiality-based.</td></tr>
+        <tr><td><strong>Net-zero target mandate</strong></td><td>5</td><td>2</td><td>SBTi C17.1–C17.4 mandates validated long-term net-zero by 2050. ESRS E1-1 references compatibility but does not mandate a standalone target.</td></tr>
+        <tr><td><strong>Base year / recalculation rules</strong></td><td>5</td><td>3</td><td>SBTi C4.1–C4.5 + C8.1–C8.7 have strict recalculation triggers (&gt;5% structural change). ESRS offers phased reliefs.</td></tr>
+        <tr><td><strong>Implementation hierarchy</strong></td><td>5</td><td>1</td><td>SBTi C21 is unique: direct abatement first, then market instruments. ESRS E1-5 discloses actions but prescribes no hierarchy.</td></tr>
+        <tr><td><strong>Carbon credit integrity criteria</strong></td><td>4</td><td>2</td><td>SBTi C25–C28 sets detailed integrity criteria (Core Carbon Principles, Oxford Offsetting Principles). ESRS E1-9 requires disclosure but does not mandate integrity criteria.</td></tr>
+        <tr><td><strong>Bioenergy / biomass rules</strong></td><td>4</td><td>2</td><td>SBTi C26 requires sustainability criteria for bio-based feedstocks and chain-of-custody. ESRS E1-8 only separates biogenic CO2.</td></tr>
+        <tr><td><strong>Hourly matching (Scope 2)</strong></td><td>5</td><td>1</td><td>SBTi C24 is the only framework with hourly matching for renewable electricity claims. ESRS E1-8 only requires location-based (mandatory) and market-based (optional).</td></tr>
+        <tr><td><strong>Third-party assurance / validation</strong></td><td>5</td><td>3</td><td>SBTi C7 requires target validation + limited assurance on GHG inventory + phased reasonable assurance. ESRS mandates limited assurance on the full sustainability statement.</td></tr>
+        <tr><td><strong>End-of-target-cycle assessment</strong></td><td>5</td><td>1</td><td>SBTi C26.1–C26.7 requires formal end-of-cycle assessment (achievement, gap analysis, next target). ESRS has no equivalent.</td></tr>
+        <tr><td><strong>Ongoing emissions responsibility</strong></td><td>4</td><td>2</td><td>SBTi OER programme and post-2035 responsibility. ESRS E1-9 covers credits/removals disclosure.</td></tr>
+        <tr><td><strong>Double materiality</strong></td><td>1</td><td>5</td><td>ESRS is built on double materiality (ESRS 1 Chapter 3). SBTi does not use materiality.</td></tr>
+        <tr><td><strong>Financial effects / climate risk</strong></td><td>2</td><td>4</td><td>ESRS E1-11 requires anticipated financial effects (physical &amp; transition risks, stranded assets). SBTi has no financial-effects requirement.</td></tr>
+        <tr><td><strong>Scenario analysis</strong></td><td>2</td><td>4</td><td>ESRS E1-2 requires scenario analysis (high-emission for physical, 1.5°C for transition). SBTi does not require scenario disclosure.</td></tr>
+        <tr><td><strong>Comparative information / reliefs</strong></td><td>2</td><td>4</td><td>ESRS 1 Chapter 7 + 10 has extensive transitional reliefs. SBTi has minimal reliefs.</td></tr>
+        <tr><td><strong>Deforestation-free supply chains</strong></td><td>5</td><td>2</td><td>SBTi C35.3 explicit prohibition + C35 certification. ESRS E4-2 mentions deforestation in biodiversity policies only.</td></tr>
+        <tr><td><strong>Investment actions (CapEx/OpEx)</strong></td><td>2</td><td>4</td><td>ESRS E1-1 para 12(b): CapEx-by-fuel-type mandatory. E1-5 para 46: financial resource quantification. SBTi mentions investments but no granular disclosure.</td></tr>
+        <tr><td><strong>Bioenergy and biofuel sourcing</strong></td><td>5</td><td>2</td><td>SBTi C35 comprehensive feedstock rules. ESRS E1-8 only separates biogenic CO2.</td></tr>
+        <tr><td><strong>Product attributes and traceability</strong></td><td>2</td><td>3</td><td>ESRS E4-2 para 13(a): product/component/raw material traceability. SBTi only for bio-based feedstocks.</td></tr>
+        <tr><td><strong>Claims framework</strong></td><td>5</td><td>2</td><td>SBTi formal Claims System (B.5). ESRS E1 implicitly constrains claims via disclosures. No positive claims framework.</td></tr>
+        <tr><td><strong>Market-based instruments in Scope 3</strong></td><td>4</td><td>1</td><td>SBTi C21–C25 allows scope 3 market instruments with integrity criteria. ESRS E1 is silent on scope 3 market instruments.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>SBTi Criteria Map</h3>
+  <p>Each theme above is grounded in specific SBTi criteria and recommendations. The mapping below shows which criteria IDs correspond to each depth score.</p>
+
+  <div class="card-list">
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">Criteria Map</div>
+        <div class="card-title">Full criteria-to-theme mapping</div>
+        <div class="card-lead">Click to expand the complete SBTi Criteria → ESRS E1 mapping for all 24 themes.</div>
+      </div></div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table style="font-size:12px">
+            <thead><tr><th>Theme</th><th>SBTi Criteria IDs</th><th>ESRS E1/E4 Reference</th></tr></thead>
+            <tbody>
+              <tr><td>Governance &amp; accountability</td><td>C1.1, C1.2, C1.3, R1.1, R1.2</td><td>ESRS 2 GOV-1; GOV-5</td></tr>
+              <tr><td>Transition plan detail</td><td>C2.1–C2.5, R2.1–R2.4</td><td>E1-1, paras 11–13; ESRS 2 SBM-3</td></tr>
+              <tr><td>Scope 1 targets</td><td>C10.1–C10.4, C11.1–C11.4, R11.1</td><td>E1-6, paras 24–29; E1-8</td></tr>
+              <tr><td>Scope 2 targets</td><td>C12.1–C12.4, C13.1–C13.2, C24.1–C24.3</td><td>E1-6; E1-8</td></tr>
+              <tr><td>Scope 3 targets</td><td>C14.1–C14.3, C15.1–C15.4, C16.1–C16.3</td><td>E1-6; E1-8; ESRS 1 para AR 24</td></tr>
+              <tr><td>Net-zero targets</td><td>C17.1–C17.4, R17.1</td><td>E1-1; E1-6</td></tr>
+              <tr><td>Base year / recalculation</td><td>C4.1–C4.5, R4.1, C8.1–C8.7</td><td>ESRS 1 Chapter 6; E1-6</td><td>None</td></tr>
+              <tr><td>Implementation hierarchy</td><td>C21.1–C21.3, R21.1</td><td>None</td></tr>
+              <tr><td>Carbon credit integrity</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1</td><td>E1-9, paras 39–44</td></tr>
+              <tr><td>Bioenergy / biomass</td><td>C26.1–C26.7, C35.1–C35.7</td><td>E1-8, para 31; E4-2 AR 3</td><td>None</td></tr>
+              <tr><td>Hourly matching</td><td>C24.1, C24.2, C24.3</td><td>None</td></tr>
+              <tr><td>Third-party assurance</td><td>C7.1–C7.5</td><td>ESRS 1 para 8.2; Directive 2013/34/EU Art 19a/29a</td><td>None</td></tr>
+              <tr><td>End-of-target-cycle</td><td>C26.1–C26.7</td><td>None</td></tr>
+              <tr><td>Ongoing emissions responsibility</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1 (OER)</td><td>E1-9, paras 39–44; E1-6</td></tr>
+              <tr><td>Double materiality</td><td>Not used</td><td>ESRS 1 Chapter 3</td></tr>
+              <tr><td>Financial effects</td><td>Not addressed</td><td>E1-11, paras 36–38</td></tr>
+              <tr><td>Scenario analysis</td><td>Not required</td><td>E1-2, para 17</td></tr>
+              <tr><td>Comparative info / reliefs</td><td>Minimal reliefs</td><td>ESRS 1 Chapter 7 + 10</td><td>Simplified comparatives</td></tr>
+              <tr><td>Deforestation-free supply chains</td><td>C35.1–C35.7, C9.8</td><td>E4-2 AR 3; E1-8 para 31</td></tr>
+              <tr><td>Investment actions (CapEx/OpEx)</td><td>C2.1 (mentions phase-out)</td><td>E1-1 para 12(b); E1-5 para 46; E1-11</td><td>None</td></tr>
+              <tr><td>Bioenergy / biofuel sourcing</td><td>C35.1–C35.7, C5 (biogenic separation)</td><td>E1-8 para 31; E4-2 AR 3</td><td>None</td></tr>
+              <tr><td>Product traceability</td><td>C35.2 (bio-based only)</td><td>E4-2 para 13(a)</td></tr>
+              <tr><td>Claims framework</td><td>B.5 Claims System</td><td>E1-6 para 24 (gross); E1-9 (credits)</td></tr>
+              <tr><td>Market instruments in Scope 3</td><td>C21–C25, C25.5–C25.7</td><td>E1-8 (gross); E1-9 (carbon credits only)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Methodology:</strong> Each theme was scored by reading operative provisions line-by-line. For SBTi: criteria (C) and recommendations (R) mapped. For ESRS E1: disclosure requirements (E1-1 to E1-11) and general requirements (ESRS 1, ESRS 2 GDRs) mapped. Scores cross-checked against extracted structured data (JSON criteria maps). No scores inferred from secondary sources.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 Interoperability Matrix -->
+<section id="matrix">
+  <span class="section-label">06 · Interoperability Assessment Matrix</span>
+  <h2>Mapping every SBTi section to its ESRS &amp; CSRD equivalent.</h2>
+  <p class="lead">Coverage is rated: <strong style="color:var(--csrd)">✓ Full</strong>, <strong style="color:#fbbf24">~ Partial</strong>, <strong style="color:#fca5a5">✗ None</strong>. The SBTi Criteria IDs column allows direct traceability to the SBTi standard text.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>SBTi Section</th><th>SBTi Criteria IDs</th><th>ESRS E1 Ref</th><th>CSRD Voluntary Ref</th><th>Coverage</th><th>Gap / Commentary</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1.1 Leadership accountability</td><td>C1.1, C1.2, C1.3, R1.1, R1.2</td><td>ESRS 2 GOV-1; GOV-5</td><td>B1</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi mandates board-level accountability SPECIFICALLY for climate targets. ESRS 2 GOV-1 requires general sustainability governance.</td></tr>
+        <tr><td>1.2 Transition plan</td><td>C2.1–C2.5, R2.1–R2.4</td><td>E1-1, paras 11–13; ESRS 2 SBM-3</td><td>C3</td><td><span class="badge badge-green">Full</span></td><td>SBTi C2.1–C2.5 maps directly to ESRS E1-1 para 12. SBTi R2.3 explicitly references ESRS E1-1.</td></tr>
+        <tr><td>2.1 Organisational boundaries</td><td>C3.1–C3.5</td><td>E1-8, para AR 19; ESRS 1 para 5.3</td><td>B3, para 33</td><td><span class="badge badge-green">Full</span></td><td>SBTi GHG Protocol alignment satisfies ESRS E1-8 boundary requirements. No gap.</td></tr>
+        <tr><td>2.2 Base year selection</td><td>C4.1–C4.5, R4.1</td><td>ESRS 1 Chapter 6; E1-6, para 24</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi recalculation rules (C8.1–C8.7, triggered by &gt;5% structural change) are stricter than ESRS reliefs.</td></tr>
+        <tr><td>2.3 GHG inventory</td><td>C5.1–C5.11</td><td>E1-8, paras 30–38; E1-7</td><td>B3, paras 33–38</td><td><span class="badge badge-green">Full</span></td><td>SBTi GHG inventory requirements cover ESRS E1-8 gross emissions disclosure.</td></tr>
+        <tr><td>2.4 EIA identification</td><td>C6.1–C6.5</td><td>Indirectly ESRS 1 para 3.2; E1-5</td><td>None</td><td><span class="badge badge-red">None</span></td><td>EIA concept is SBTi-specific. ESRS captures this indirectly via materiality assessment but does not mandate discrete EIA identification.</td></tr>
+        <tr><td>2.5 Third-party assurance</td><td>C7.1–C7.5</td><td>ESRS 1 para 8.2; Directive 2013/34/EU Art 19a/29a</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi requires target validation + limited assurance on GHG inventory + phased reasonable assurance. ESRS mandates limited assurance on full sustainability statement.</td></tr>
+        <tr><td>3.1 General target setting</td><td>C9.1–C9.10, R9.1, R9.2</td><td>ESRS 2 GDR-T, paras 50–54; E1-6, paras 24–29</td><td>C3</td><td><span class="badge badge-green">Full</span></td><td>SBTi target attributes map directly to GDR-T and E1-6. CSRD Voluntary C3 asks for targets without ambition benchmarking.</td></tr>
+        <tr><td>3.2 Scope 1 targets</td><td>C10.1–C10.4, C11.1–C11.4, R11.1</td><td>E1-6, paras 24–29; E1-8</td><td>B3 + C3</td><td><span class="badge badge-green">Full</span></td><td>ESRS E1-6 requires gross scope 1 targets; SBTi provides validated targets that satisfy this.</td></tr>
+        <tr><td>3.3 Scope 2 targets</td><td>C12.1–C12.4, C13.1–C13.2</td><td>E1-6; E1-8</td><td>B3</td><td><span class="badge badge-green">Full</span></td><td>SBTi hourly matching (C24) goes beyond ESRS E1-8 location/market-based requirement. A company reporting SBTi scope 2 data automatically satisfies ESRS.</td></tr>
+        <tr><td>3.4 Scope 3 targets</td><td>C14.1–C14.3, C15.1–C15.4, C16.1–C16.3</td><td>E1-6; E1-8; ESRS 1 para AR 24</td><td>B3 (paras 49–52)</td><td><span class="badge badge-green">Full</span></td><td>SBTi Category A ≥67% scope 3 coverage likely exceeds ESRS materiality threshold. CSRD Voluntary encourages but does not mandate scope 3.</td></tr>
+        <tr><td>3.5 Net-zero targets</td><td>C17.1–C17.4, R17.1</td><td>E1-1; E1-6</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi mandates validated long-term net-zero target by 2050. ESRS E1-1 requires transition plan compatibility but does not mandate a standalone validated net-zero target.</td></tr>
+        <tr><td>3.6 Reporting target info</td><td>C18.1–C18.3, C19.1–C19.6</td><td>ESRS 2 GDR-T; E1-6; ESRS 1 Chapter 7</td><td>B1</td><td><span class="badge badge-green">Full</span></td><td>SBTi annual reporting requirements map to ESRS annual sustainability statement.</td></tr>
+        <tr><td>3.7 Target revision</td><td>C20.1–C20.3</td><td>ESRS 1 para 7.6; para 5.4; E1-6</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi has explicit trigger-based revision criteria (&gt;5% structural change, science update, sector standard update). ESRS has restatement rules but no target-validation-driven revision triggers.</td></tr>
+        <tr><td>4.1 Implementation hierarchy</td><td>C21.1–C21.3, R21.1</td><td>None</td><td>None</td><td><span class="badge badge-red">None</span></td><td>SBTi C21 introduces a unique direct-abatement-first hierarchy. ESRS E1 does not prescribe an implementation hierarchy. Significant SBTi addition.</td></tr>
+        <tr><td>4.2 Actions &amp; market instruments</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1</td><td>E1-5; E1-9, paras 39–44</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi sets detailed integrity criteria for market instruments and bio-based feedstocks. ESRS E1-9 requires carbon-credit disclosure but does not mandate SBTi-style integrity criteria.</td></tr>
+        <tr><td>4.3 Electricity hierarchy</td><td>C29.1, C29.2</td><td>None</td><td>None</td><td><span class="badge badge-red">None</span></td><td>SBTi C29 establishes an electricity-specific implementation hierarchy. ESRS E1-8 does not have an electricity-specific hierarchy.</td></tr>
+        <tr><td>4.4 Hourly matching</td><td>C24.1, C24.2, C24.3</td><td>None</td><td>None</td><td><span class="badge badge-red">None</span></td><td>SBTi C24 is the only framework requiring hourly matching for renewable electricity claims. ESRS E1-8 only requires location-based (mandatory) and market-based (optional) scope 2.</td></tr>
+        <tr><td>4.5 Bio-based feedstocks</td><td>C26.1–C26.7</td><td>E1-8 (biogenic CO2)</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi C26 requires sustainability criteria for bio-based feedstocks. ESRS E1-8 only requires separate reporting of biogenic CO2 but lacks SBTi's feedstock integrity rules.</td></tr>
+        <tr><td>5.1 Tracking progress</td><td>C25.1–C25.7</td><td>ESRS 2 GDR-T; E1-6; E1-1</td><td>B1</td><td><span class="badge badge-green">Full</span></td><td>SBTi annual progress reporting maps directly to ESRS GDR-T annual target progress. No gap.</td></tr>
+        <tr><td>5.2 End-of-cycle assessment</td><td>C26.1–C26.7</td><td>None</td><td>None</td><td><span class="badge badge-red">None</span></td><td>SBTi C26 requires formal end-of-target-cycle assessment. ESRS has no equivalent end-of-cycle assessment requirement.</td></tr>
+        <tr><td>6.1–6.6 Ongoing emissions responsibility</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1 (OER)</td><td>E1-9, paras 39–44; E1-6</td><td>None</td><td><span class="badge badge-amber">Partial</span></td><td>SBTi OER programme and post-2035 responsibility requirements are unique. ESRS E1-9 covers carbon credits and removals disclosure but does not mirror SBTi's OER integrity criteria or post-2035 responsibility mandate.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 07 Gap-Action Checklist -->
+<section id="checklist">
+  <span class="section-label">07 · Gap-Action Checklist</span>
+  <h2>52 actions — from gap to done.</h2>
+  <p class="lead">For a company already SBTi-compliant, these are the additional steps needed to satisfy ESRS E1 &amp; CSRD Voluntary Annex requirements. Each item shows Owner, Timeline, Effort, and Priority.</p>
+
+  <div class="explorer-bar">
+    <input type="text" id="checklistSearch" placeholder="Search actions, refs, owners..." onkeyup="filterChecklist()">
+    <select id="priorityFilter" onchange="filterChecklist()">
+      <option value="">All priorities</option>
+      <option value="Must-do">Must-do</option>
+      <option value="Should-do">Should-do</option>
+    </select>
+    <select id="effortFilter" onchange="filterChecklist()">
+      <option value="">All effort</option>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table class="checklist-table" id="checklistTable">
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Section</th>
+          <th>Action</th>
+          <th>SBTi Covers</th>
+          <th>ESRS Ref</th>
+          <th>Owner</th>
+          <th>Timeline</th>
+          <th>Effort</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody id="checklistBody">
+        <!-- 1.x Governance -->
+        <tr class="checklist-row"><td class="ref">1.1</td><td>Governance, Strategy and Double Materiality</td><td class="action">Conduct double materiality assessment for climate change</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS 1, Ch. 3; E1 para 1</td><td class="owner">Sustainability / Risk</td><td>6–9 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.2</td><td>Governance, Strategy and Double Materiality</td><td class="action">Document climate-related impacts on people and environment (impact materiality)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, para 3.2.1</td><td class="owner">Sustainability / ESG</td><td>3–4 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.3</td><td>Governance, Strategy and Double Materiality</td><td class="action">Document climate-related financial risks and opportunities (financial materiality)</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-2, paras 14–17</td><td class="owner">Finance / Risk</td><td>4–6 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.4</td><td>Governance, Strategy and Double Materiality</td><td class="action">Obtain board-level governance disclosure for climate targets</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS 2 GOV-1</td><td class="owner">Company Secretary / Sustainability</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.5</td><td>Governance, Strategy and Double Materiality</td><td class="action">Align transition plan with EU Climate Law and 1.5°C compatibility</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-1, para 11</td><td class="owner">Sustainability / Strategy</td><td>1 month</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.6</td><td>Governance, Strategy and Double Materiality</td><td class="action">Disclose CapEx amounts for coal, oil and gas economic activities in transition plan</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-1, para 12(b)</td><td class="owner">Finance / Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.7</td><td>Governance, Strategy and Double Materiality</td><td class="action">Assess locked-in GHG emissions from key physical assets and products</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-1, para 12(d)</td><td class="owner">Sustainability / Engineering</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">1.8</td><td>Governance, Strategy and Double Materiality</td><td class="action">Publish transition plan disclosure within 15 months of validation (if Category A)</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-1, paras 11–13</td><td class="owner">Sustainability / IR</td><td>Ongoing</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+
+        <!-- 2.x Risk -->
+        <tr class="checklist-row"><td class="ref">2.1</td><td>Risk, Resilience and Scenario Analysis</td><td class="action">Perform climate-related scenario analysis</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-2, para 17</td><td class="owner">Sustainability / Risk / Engineering</td><td>6–9 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">2.2</td><td>Risk, Resilience and Scenario Analysis</td><td class="action">Disclose scenario ranges, temperature projections, scope, key assumptions, and time period</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-2, para 17</td><td class="owner">Sustainability / Risk</td><td>2–3 months (after scenario work)</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">2.3</td><td>Risk, Resilience and Scenario Analysis</td><td class="action">Assess and disclose climate resilience of strategy and business model</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-3, para 19</td><td class="owner">Strategy / Sustainability</td><td>3–4 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">2.4</td><td>Risk, Resilience and Scenario Analysis</td><td class="action">Disclose significant areas of uncertainty in climate resilience analysis</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-3, para 19(b)</td><td class="owner">Sustainability / Risk</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 3.x Metrics -->
+        <tr class="checklist-row"><td class="ref">3.1</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Report gross Scope 1, 2, 3 GHG emissions in tCO2eq</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-8, paras 30–38</td><td class="owner">Sustainability / Finance</td><td>1–2 months (formatting)</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.2</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Report location-based AND market-based Scope 2</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-8, para 34</td><td class="owner">Sustainability</td><td>1 month</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.3</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Report Scope 3 emissions for all significant categories (if material)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-8, para 35</td><td class="owner">Sustainability / Procurement</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.4</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Disclose GHG reduction targets with base year, target year, absolute/relative, scope, and 1.5°C compatibility statement</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-6, paras 24–29</td><td class="owner">Sustainability</td><td>1 month</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.5</td><td>Metrics, Targets and GHG Emissions</td><td class="action">State whether GHG targets are science-based and compatible with 1.5°C</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-6, para 24(a)</td><td class="owner">Sustainability</td><td>1 week</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.6</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Disclose energy consumption by source (renewable, non-renewable, fossil)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-7</td><td class="owner">Sustainability / Operations</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.7</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Report comparative information (prior-year emissions and target progress)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, Chapter 7.1</td><td class="owner">Finance / Sustainability</td><td>2 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">3.8</td><td>Metrics, Targets and GHG Emissions</td><td class="action">Restate base year and comparative emissions for structural changes (acquisitions, divestments)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, paras 7.6, 5.4</td><td class="owner">Finance / Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+
+        <!-- 4.x Carbon Credits -->
+        <tr class="checklist-row"><td class="ref">4.1</td><td>Carbon Credits, Removals and Neutralisation</td><td class="action">Disclose carbon credits purchased and cancelled during reporting period</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-9, paras 39–44</td><td class="owner">Sustainability / Finance</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">4.2</td><td>Carbon Credits, Removals and Neutralisation</td><td class="action">Disclose share of carbon credits from GHG removal projects</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-9, para 40</td><td class="owner">Sustainability</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">4.3</td><td>Carbon Credits, Removals and Neutralisation</td><td class="action">Disclose integrity standards used for carbon credits (e.g., Core Carbon Principles, Gold Standard)</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-9, para 41</td><td class="owner">Sustainability</td><td>1 week</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">4.4</td><td>Carbon Credits, Removals and Neutralisation</td><td class="action">Ensure carbon credits are NOT counted toward GHG reduction targets in ESRS disclosure</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-6, para 24</td><td class="owner">Sustainability</td><td>1 week</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">4.5</td><td>Carbon Credits, Removals and Neutralisation</td><td class="action">Report GHG removals (own operations and value chain) separately from gross emissions</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-9, para 42</td><td class="owner">Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 5.x Actions -->
+        <tr class="checklist-row"><td class="ref">5.1</td><td>Actions, Resources and Implementation</td><td class="action">Disclose decarbonisation levers and corresponding actions</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-5, para 25</td><td class="owner">Sustainability / Operations</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">5.2</td><td>Actions, Resources and Implementation</td><td class="action">Disclose anticipated financial resources (CapEx and OpEx) for climate actions</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-5, para 25; E1-1, para 12</td><td class="owner">Finance / Sustainability</td><td>3–4 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">5.3</td><td>Actions, Resources and Implementation</td><td class="action">Report achieved and expected GHG emission reduction by decarbonisation lever</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E1-5, para 26</td><td class="owner">Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">5.4</td><td>Actions, Resources and Implementation</td><td class="action">Disclose adaptation actions and their contribution to resilience</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-5, para 27</td><td class="owner">Sustainability / Risk</td><td>3–4 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+
+        <!-- 6.x Financial Effects -->
+        <tr class="checklist-row"><td class="ref">6.1</td><td>Anticipated Financial Effects</td><td class="action">Quantify anticipated financial effects from physical climate risks</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-11, para 36</td><td class="owner">Finance / Risk</td><td>6–9 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">6.2</td><td>Anticipated Financial Effects</td><td class="action">Quantify anticipated financial effects from transition risks (e.g., stranded assets, carbon pricing)</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-11, para 37</td><td class="owner">Finance / Risk</td><td>6–9 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">6.3</td><td>Anticipated Financial Effects</td><td class="action">Disclose real-estate collateral by energy-efficiency class (if applicable)</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-11, para 38</td><td class="owner">Finance / Real Estate</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">6.4</td><td>Anticipated Financial Effects</td><td class="action">Disclose stranded asset risks and write-downs</td><td><span class="badge badge-red">No</span></td><td class="ref">E1-11 para 37; E1-3 para 19</td><td class="owner">Finance / Strategy</td><td>4–6 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 7.x Assurance -->
+        <tr class="checklist-row"><td class="ref">7.1</td><td>Assurance, Validation and Compliance</td><td class="action">Obtain limited assurance on ESRS sustainability statement</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, para 8.2; Directive 2013/34/EU</td><td class="owner">Audit / Finance</td><td>3–6 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">7.2</td><td>Assurance, Validation and Compliance</td><td class="action">Prepare for reasonable assurance on ESRS sustainability statement (phased)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS 1, para 8.2</td><td class="owner">Audit / Finance</td><td>12–18 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">7.3</td><td>Assurance, Validation and Compliance</td><td class="action">Ensure transition plan is reviewed at least every 5 years (SBTi) AND updated for ESRS</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-1, para 13</td><td class="owner">Sustainability / Board</td><td>Ongoing</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+
+        <!-- 8.x Deforestation -->
+        <tr class="checklist-row"><td class="ref">8.1</td><td>Deforestation-Free Supply Chains and Sourcing</td><td class="action">Establish and disclose deforestation-free policies for bio-based feedstocks</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E4-2, AR 3</td><td class="owner">Sustainability / Procurement</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">8.2</td><td>Deforestation-Free Supply Chains and Sourcing</td><td class="action">Separate FLAG (Forest, Land, Agriculture) emissions from non-FLAG targets and emissions</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-8, para 31</td><td class="owner">Sustainability</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">8.3</td><td>Deforestation-Free Supply Chains and Sourcing</td><td class="action">Obtain sustainability certification and chain-of-custody documentation for bio-based feedstocks</td><td><span class="badge badge-green">Yes</span></td><td class="ref">N/A</td><td class="owner">Procurement / Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 9.x Investment Actions -->
+        <tr class="checklist-row"><td class="ref">9.1</td><td>Investment Actions (CapEx, OpEx, Financial Resources)</td><td class="action">Extract and disclose CapEx amounts for coal, oil and gas economic activities by NACE code</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-1, para 12(b)</td><td class="owner">Finance / FP and A</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">9.2</td><td>Investment Actions (CapEx, OpEx, Financial Resources)</td><td class="action">Quantify and disclose significant financial resources (CapEx and OpEx) allocated to decarbonisation levers</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-5, para 46</td><td class="owner">Finance / Sustainability</td><td>3–4 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">9.3</td><td>Investment Actions (CapEx, OpEx, Financial Resources)</td><td class="action">Disclose non-financial resources (e.g., FTE equivalents) allocated to climate actions</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-5, para 46(c)</td><td class="owner">Sustainability / HR</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">9.4</td><td>Investment Actions (CapEx, OpEx, Financial Resources)</td><td class="action">Assess and disclose stranded asset risks and potential write-downs</td><td><span class="badge badge-red">No</span></td><td class="ref">ESRS E1-11 para 37; E1-3 para 19</td><td class="owner">Finance / Strategy</td><td>4–6 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 10.x Bioenergy -->
+        <tr class="checklist-row"><td class="ref">10.1</td><td>Bioenergy and Biofuel Sourcing</td><td class="action">Report biogenic CO2 emissions separately from gross scope 1 emissions</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-8, para 31</td><td class="owner">Sustainability</td><td>1 week</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">10.2</td><td>Bioenergy and Biofuel Sourcing</td><td class="action">Ensure bio-based feedstocks meet no-deforestation and sustainability criteria</td><td><span class="badge badge-green">Yes</span></td><td class="ref">N/A</td><td class="owner">Procurement / Sustainability</td><td>Ongoing</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">10.3</td><td>Bioenergy and Biofuel Sourcing</td><td class="action">Document land-related emissions and removals specific to biomass feedstock production systems</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-8, para 31</td><td class="owner">Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 11.x Product Traceability -->
+        <tr class="checklist-row"><td class="ref">11.1</td><td>Product Attributes and Traceability</td><td class="action">Develop traceability policies for products, components and raw materials with material biodiversity impacts</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">ESRS E4-2, para 13(a)</td><td class="owner">Sustainability / Procurement</td><td>3–4 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">11.2</td><td>Product Attributes and Traceability</td><td class="action">Disclose chain-of-custody models used for commodity certificates (mass balance, book-and-claim)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">N/A</td><td class="owner">Sustainability / Procurement</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 12.x Claims -->
+        <tr class="checklist-row"><td class="ref">12.1</td><td>Claims Framework</td><td class="action">Align public claims with SBTi Claims System requirements and ESRS disclosure constraints</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-6, para 24; E1-9</td><td class="owner">Sustainability / Legal / Communications</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-red">Must-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">12.2</td><td>Claims Framework</td><td class="action">Prepare for EU Green Claims Directive substantiation requirements (outside ESRS scope)</td><td><span class="badge badge-amber">Partial</span></td><td class="ref">N/A (outside ESRS)</td><td class="owner">Legal / Sustainability / Communications</td><td>6–9 months</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+
+        <!-- 13.x Market Instruments -->
+        <tr class="checklist-row"><td class="ref">13.1</td><td>Market-Based Instruments in Scope 3</td><td class="action">Disclose scope 3 market instruments used and their integrity criteria</td><td><span class="badge badge-green">Yes</span></td><td class="ref">E1-8 (gross scope 3); E1-9 (carbon credits)</td><td class="owner">Sustainability</td><td>2–3 months</td><td><span class="badge badge-amber">Medium</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+        <tr class="checklist-row"><td class="ref">13.2</td><td>Market-Based Instruments in Scope 3</td><td class="action">Report mass balance and book-and-claim commodity certificates separately from physical GHG inventory</td><td><span class="badge badge-green">Yes</span></td><td class="ref">ESRS E1-9, para 39</td><td class="owner">Sustainability</td><td>1–2 months</td><td><span class="badge badge-green">Low</span></td><td><span class="badge badge-amber">Should-do</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 08 Practical Implications -->
+<section id="practical">
+  <span class="section-label">08 · Practical Implications for Reporting Companies</span>
+  <h2>What an SBTi-aligned company needs to do additionally.</h2>
+  <p class="lead">The following points summarise what a company already compliant with SBTi CNZS V2.0 needs to do additionally to satisfy ESRS E1 and CSRD Voluntary Annex requirements.</p>
+
+  <div class="score-grid">
+    <div class="score-block score-sbti"><div class="score-num">18</div><div class="score-label">Actions already covered by SBTi</div></div>
+    <div class="score-block score-esrs"><div class="score-num">16</div><div class="score-label">Actions partially covered by SBTi</div></div>
+    <div class="score-block score-csrd"><div class="score-num">18</div><div class="score-label">Actions NOT covered by SBTi (full gap)</div></div>
+  </div>
+
+  <div class="card-list">
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">01 · Double Materiality</div>
+        <div class="card-title">A mandatory assessment with no SBTi equivalent</div>
+        <div class="card-lead">Even if SBTi targets cover all scopes, ESRS requires a formal materiality assessment.</div>
+      </div></div>
+      <div class="card-body">
+        <p>SBTi does not use materiality — all criteria apply regardless of materiality. ESRS E1 requires a double materiality assessment to determine which climate disclosures are mandatory. This is the foundation for all other ESRS E1 disclosures and must be started early (6–9 months before first report).</p>
+        <p><strong>Owner:</strong> Sustainability / Risk. <strong>Effort:</strong> High. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">02 · Scenario Analysis</div>
+        <div class="card-title">At least two scenarios: high-emission and 1.5°C-aligned</div>
+        <div class="card-lead">ESRS E1-2 requires scenario analysis. SBTi does not.</div>
+      </div></div>
+      <div class="card-body">
+        <p>ESRS E1-2 para 17 requires at least one high-emission scenario (for physical risks) and one 1.5°C-aligned scenario (for transition risks). SBTi does not require scenario disclosure. This is an additional workload that can leverage TCFD scenario work if already done.</p>
+        <p><strong>Owner:</strong> Sustainability / Risk / Engineering. <strong>Effort:</strong> High. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">03 · Financial Effects</div>
+        <div class="card-title">Quantify anticipated financial effects from physical and transition risks</div>
+        <div class="card-lead">ESRS E1-11 requires financial quantification. SBTi has no equivalent.</div>
+      </div></div>
+      <div class="card-body">
+        <p>ESRS E1-11 paras 36–38 require disclosure of anticipated financial effects from physical risks, transition risks (stranded assets, carbon pricing), and real-estate collateral by energy-efficiency class. SBTi has no financial-effects requirement. Companies must model financial impacts separately using scenario analysis outputs as input.</p>
+        <p><strong>Owner:</strong> Finance / Risk. <strong>Effort:</strong> High. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">04 · Scope 3 Phased-in Relief</div>
+        <div class="card-title">Document materiality coverage even with SBTi ≥67%</div>
+        <div class="card-lead">SBTi Category A companies already collect Scope 3 data but must document ESRS materiality coverage.</div>
+      </div></div>
+      <div class="card-body">
+        <p>ESRS E1-8 offers phased-in relief for Scope 3 reporting. SBTi Category A companies already collect Scope 3 data and will not need this relief, but must ensure ESRS materiality coverage is documented for each Scope 3 category.</p>
+        <p><strong>Owner:</strong> Sustainability / Procurement. <strong>Effort:</strong> Medium. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">05 · Carbon Credit Disclosure</div>
+        <div class="card-title">Granular disclosure of credits purchased, cancelled, and from removal projects</div>
+        <div class="card-lead">ESRS E1-9 requires granular credit disclosure. SBTi only requires integrity criteria.</div>
+      </div></div>
+      <div class="card-body">
+        <p>ESRS E1-9 paras 39–44 requires disclosure of carbon credits (purchased, cancelled, share from removal projects, integrity standards). SBTi companies using credits for neutralisation must prepare this data even though credits cannot count toward SBTi targets.</p>
+        <p><strong>Owner:</strong> Sustainability / Finance. <strong>Effort:</strong> Medium. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">06 · Transition Plan Alignment</div>
+        <div class="card-title">SBTi plans meet most E1-1 requirements, but not all</div>
+        <div class="card-lead">Companies must add CapEx for coal/oil/gas, locked-in emissions, and EU Climate Law alignment.</div>
+      </div></div>
+      <div class="card-body">
+        <p>SBTi transition plans already meet most E1-1 requirements, but companies must ensure the plan explicitly references CapEx for coal/oil/gas activities, locked-in emissions assessments, and EU Climate Law alignment — elements SBTi does not explicitly require.</p>
+        <p><strong>Owner:</strong> Sustainability / Strategy. <strong>Effort:</strong> Low. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">07 · Voluntary Annex Overlap</div>
+        <div class="card-title">A company reporting under SBTi and ESRS E1 automatically satisfies most CSRD Voluntary Annex requirements</div>
+        <div class="card-lead">The Voluntary Annex adds no net-new obligations for such companies.</div>
+      </div></div>
+      <div class="card-body">
+        <p>A company reporting under SBTi and ESRS E1 will automatically satisfy most CSRD Voluntary Annex requirements. The Voluntary Annex adds no net-new obligations for such companies — it is a proportionate standard for smaller undertakings with minimal overlap with SBTi's depth.</p>
+        <p><strong>Owner:</strong> Sustainability / Compliance. <strong>Effort:</strong> Low. <strong>Priority:</strong> Should-do.</p>
+      </div>
+    </div>
+
+    <div class="detail-card" onclick="this.classList.toggle('open')">
+      <div class="card-header"><div>
+        <div class="card-tag">08 · Assurance Gap</div>
+        <div class="card-title">Align assurance scopes to avoid duplication</div>
+        <div class="card-lead">ESRS requires limited assurance on the full sustainability statement.</div>
+      </div></div>
+      <div class="card-body">
+        <p>ESRS requires limited assurance on the full sustainability statement. SBTi requires validation + limited assurance on GHG inventory + reasonable assurance on target implementation (phased). Companies may need to align assurance scopes to avoid duplication. Engage auditors early.</p>
+        <p><strong>Owner:</strong> Audit / Finance. <strong>Effort:</strong> High. <strong>Priority:</strong> Must-do.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Methodology</h3>
+  <p>Timelines assume a mid-sized EU undertaking (~5,000 employees), existing SBTi compliance, and no prior ESRS experience. Effort is person-time, not calendar time: <strong>High = 1–6 person-months</strong> (cross-functional, complex modelling, external consultants); <strong>Medium = 2–6 person-weeks</strong> (data collection, minor system changes); <strong>Low = 1–5 person-days</strong> (formatting, one-line disclosures). Add 3–6 months if a new reporting platform is required. External consultant procurement cycles (2–3 months) are not included.</p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p><strong>Sources:</strong> (a) SBTi Corporate Net-Zero Standard V2.0 (June 2026); (b) Revised ESRS June 2026 — Commission Delegated Regulation C(2026) 5010, Annex I (ESRS E1); (c) Commission Delegated Regulation (EU) 2026/5011 Annex — Voluntary Standard for undertakings below 1,000 employees. Scores and mappings are grounded in operative provisions read line-by-line. No scores inferred from secondary sources.</p>
+  <div class="disclaimer-box">
+    <strong>Disclaimer</strong>
+    This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual documents for complete understanding of the details with the right context. ESRS depth is sometimes distributed across multiple disclosure requirements (e.g., governance in ESRS 2, targets in E1-6), which may understate apparent depth if viewed only through E1. CSRD Voluntary Annex is proportionate by design; low scores reflect intent, not deficiency. Timelines and effort estimates are directional, not prescriptive. National transposition of CSRD and sector-specific guidance (e.g., banks, insurers) may add requirements not captured here.
+  </div>
+</footer>
+
+</main>
 
 <script>
-// ── Navigation active state & scroll progress ──
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav a');
-const progressFill = document.getElementById('progressFill');
+(function(){
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.topbar-nav a');
+  const progressFill = document.getElementById('progressFill');
 
-function onScroll() {
-  let current = '';
-  const scrollPos = window.scrollY + 120;
-  sections.forEach(sec => { if (sec.offsetTop <= scrollPos) current = sec.id; });
-  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  progressFill.style.width = (window.scrollY / docHeight * 100) + '%';
-}
-window.addEventListener('scroll', onScroll);
-window.addEventListener('load', onScroll);
+  function onScroll() {
+    let current = ''; let maxTop = -Infinity;
+    sections.forEach(s => {
+      const top = s.getBoundingClientRect().top;
+      if (top <= 100 && top > maxTop) { maxTop = top; current = s.id; }
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = window.scrollY / docHeight;
+    progressFill.style.width = (scrolled * 100) + '%';
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
 
-// ── Checklist filter ──
-function filterChecklist() {
-  const q = document.getElementById('checkSearch').value.toLowerCase();
-  const p = document.getElementById('checkFilter').value;
-  const s = document.getElementById('checkSBTI').value;
-  document.querySelectorAll('.checklist-row').forEach(row => {
-    const txt = row.innerText.toLowerCase();
-    const matchQ = txt.includes(q);
-    const matchP = !p || row.dataset.priority === p;
-    const matchS = !s || row.dataset.sbti === s;
-    row.style.display = (matchQ && matchP && matchS) ? '' : 'none';
+  const themeBtn = document.querySelector('.theme-btn');
+  function updateThemeLabel() {
+    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'Dark' : 'Light';
+  }
+  // Observe data-theme changes to update button label
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName === 'data-theme') updateThemeLabel();
+    });
   });
-}
+  observer.observe(document.documentElement, { attributes: true });
+  updateThemeLabel();
 
-// ── Explorer data (embedded subset) ──
-const explorerData = [
-  // SBTi criteria
-  {source:'sbti', type:'Criterion', id:'C1.1', chapter:'NET-ZERO GOVERNANCE', section:'Leadership accountability', text:'The company\'s highest governing body (i.e., Board of Directors or equivalent) shall agree to assume overall accountability for SBTi targets, including setting and submitting targets for validation, and overseeing target implementation.'},
-  {source:'sbti', type:'Criterion', id:'C1.2', chapter:'NET-ZERO GOVERNANCE', section:'Leadership accountability', text:'Companies shall submit and report a description of the governance structures responsible for overseeing and implementing their targets.'},
-  {source:'sbti', type:'Criterion', id:'C1.3', chapter:'NET-ZERO GOVERNANCE', section:'Leadership accountability', text:'Companies shall establish documented processes for reporting progress, periodic review and adjustment of targets to reflect evolving science, company performance, and best practice.'},
-  {source:'sbti', type:'Criterion', id:'C2.1', chapter:'NET-ZERO GOVERNANCE', section:'Developing a transition plan', text:'Transition plans shall describe the actions and corresponding timeframes required to implement the company\'s targets in a manner consistent with reaching net-zero by no later than 2050. The plan shall include: a) Target details; b) Scope; c) Actions.'},
-  {source:'sbti', type:'Criterion', id:'C2.2', chapter:'NET-ZERO GOVERNANCE', section:'Developing a transition plan', text:'Transition plans shall be formally approved and adopted by the company\'s highest governing body.'},
-  {source:'sbti', type:'Criterion', id:'C2.4', chapter:'NET-ZERO GOVERNANCE', section:'Developing a transition plan', text:'Category A companies shall publish a disclosure of their transition plan within 15 months of completing Target Validation, or sooner if required for compliance with applicable regulatory frameworks.'},
-  {source:'sbti', type:'Recommendation', id:'R2.3', chapter:'NET-ZERO GOVERNANCE', section:'Developing a transition plan', text:'Companies are recommended to develop transition plans in line with international standards such as the Transition Planning Taskforce (TPT) Disclosure Framework. When applicable, companies must ensure compliance with applicable national or subnational regulatory frameworks, such as the disclosure requirements set out in ESRS E1-1 (Transition plan for climate change mitigation)...'},
-  {source:'sbti', type:'Criterion', id:'C4.1', chapter:'TARGET BASE YEAR ASSESSMENT', section:'Selecting a target base year', text:'Companies shall select the most recent year for which comprehensive emissions and other applicable data are available as the target base year for near-term targets.'},
-  {source:'sbti', type:'Criterion', id:'C5.1', chapter:'TARGET BASE YEAR ASSESSMENT', section:'Target base year GHG inventory', text:'Companies shall account and report their GHG inventory in accordance with the GHG Protocol Standards and Guidance, using the most recent and effective versions available.'},
-  {source:'sbti', type:'Criterion', id:'C5.2', chapter:'TARGET BASE YEAR ASSESSMENT', section:'Target base year GHG inventory', text:'Category A and Category B companies shall account and report scope 1 and scope 2 emissions, and Category A companies shall also report scope 3 emissions within their GHG inventory.'},
-  {source:'sbti', type:'Criterion', id:'C8.3', chapter:'TARGET BASE YEAR ASSESSMENT', section:'Target base year recalculation', text:'Companies shall apply a 5% significance threshold to determine whether recalculation is required; this threshold is met when the cumulative effect of identified changes results in a variation of 5% or more in total emissions for any individual scope.'},
-  {source:'sbti', type:'Criterion', id:'C10.1', chapter:'TARGET SETTING', section:'Scope 1 targets', text:'Near-term targets shall cover 100% of scope 1 emissions.'},
-  {source:'sbti', type:'Criterion', id:'C12.1', chapter:'TARGET SETTING', section:'Scope 2 targets', text:'Near-term targets shall cover 100% of scope 2 emissions.'},
-  {source:'sbti', type:'Criterion', id:'C14.1', chapter:'TARGET SETTING', section:'Scope 3 targets', text:'Near-term targets shall cover at least all scope 3 categories that individually represent 5% or more of the company\'s scope 3 emissions in categories 1-14 based on the physical GHG inventory.'},
-  {source:'sbti', type:'Criterion', id:'C17.1', chapter:'TARGET SETTING', section:'Net-zero targets', text:'Companies (including Category B companies) shall set near-term targets on scope 1, scope 2, and scope 3 emissions in accordance with the Corporate Net-Zero Standard or any applicable SBTi Sector Standard.'},
-  {source:'sbti', type:'Criterion', id:'C17.4', chapter:'TARGET SETTING', section:'Net-zero targets', text:'To reach a state of net-zero, the company shall: a) Reduce scope 1, 2, and 3 emissions to zero or to a residual level consistent with eligible net-zero pathways; and b) Neutralize any residual emissions at the net-zero target date.'},
-  {source:'sbti', type:'Criterion', id:'C21.1', chapter:'TARGET IMPLEMENTATION', section:'Implementation hierarchy', text:'Companies shall document and demonstrate that activity-level actions have been assessed and implemented, where feasible, before relying on activity pool-level or sector-level actions.'},
-  {source:'sbti', type:'Criterion', id:'C25.1', chapter:'TARGET IMPLEMENTATION', section:'Actions & market instruments', text:'Companies shall demonstrate that actions taken at any level of the implementation hierarchy correspond to the same activity type, product, material, fuel, or energy source as the company\'s underlying activity reflected in the inventory.'},
-  {source:'sbti', type:'Criterion', id:'C26.2', chapter:'TARGET IMPLEMENTATION', section:'Actions & market instruments', text:'Excluded mechanisms: a) Emissions reductions derived from hypothetical scenarios; b) Emissions reductions or removals, including GHG credits, used for the SBTi\'s Ongoing Emissions Responsibility program; c) GHG credits sold or transferred to a third party; d) Emissions reductions estimated ex ante and not yet realized.'},
-
-  // ESRS E1
-  {source:'esrs', type:'Criterion', id:'E1-1 para 11', chapter:'ESRS E1 Strategy', section:'Transition plan', text:'The objective of this DR is to enable an understanding of the undertaking\'s past, current and future mitigation efforts to ensure that its strategy and business model are compatible with the transition to a sustainable economy and with limiting global warming to 1.5°C in line with the Paris Agreement and the objectives of the European Climate Law (Regulation (EU) 2021/1119), including achieving climate neutrality by 2050.'},
-  {source:'esrs', type:'Criterion', id:'E1-1 para 12', chapter:'ESRS E1 Strategy', section:'Transition plan features', text:'The information about the transition plan shall include: (a) a description of its key features, including GHG emission reduction targets, decarbonisation levers, key actions, investments and funding, approval by administrative/management/supervisory bodies; (b) CapEx amounts invested during the reporting period related to coal, oil and gas economic activities; (c) key assumptions and dependencies; (d) a qualitative assessment of how potential locked-in GHG emissions may jeopardise achievement of the plan; and (e) an explanation of progress in implementing the transition plan.'},
-  {source:'esrs', type:'Criterion', id:'E1-2 para 17', chapter:'ESRS E1 Strategy', section:'Scenario analysis', text:'If climate-related scenario analysis is used, disclose: ranges of scenarios (including at least one high-emission scenario for physical risks and at least one 1.5°C-aligned scenario for transition risks), associated temperature projections, scope of operations, key assumptions, and time period when carried out.'},
-  {source:'esrs', type:'Criterion', id:'E1-6 para 24', chapter:'ESRS E1 Metrics', section:'Targets', text:'The undertaking shall disclose the GHG emission reduction targets it has set, including: (a) absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where relevant in intensity value; (b) if the scope diverges from the GHG inventory, the percentages for scopes 1, 2 and 3 covered; (c) a statement on whether targets are science-based and compatible with limiting global warming to 1.5°C, stating which framework/methodology was used...'},
-  {source:'esrs', type:'Criterion', id:'E1-6 AR 12', chapter:'ESRS E1 Metrics', section:'Gross targets', text:'The GHG emission reduction targets shall be gross targets, meaning that the undertaking shall not include GHG removals, carbon credits or avoided emissions as means of achieving the GHG emission reduction targets.'},
-  {source:'esrs', type:'Criterion', id:'E1-8 para 30', chapter:'ESRS E1 Metrics', section:'Gross GHG emissions', text:'The undertaking shall disclose absolute gross GHG emissions during the reporting period, expressed as metric tonnes of CO2eq classified as: i) scope 1 GHG emissions; ii) scope 2 GHG emissions (location-based and market-based); iii) scope 3 GHG emissions from each significant category.'},
-  {source:'esrs', type:'Criterion', id:'E1-8 para 31', chapter:'ESRS E1 Metrics', section:'Biogenic CO2', text:'The undertaking shall disclose its direct biogenic CO2 emissions from combustion or biodegradation of biomass separately from scope 1 GHG emissions.'},
-  {source:'esrs', type:'Criterion', id:'E1-9 para 39', chapter:'ESRS E1 Metrics', section:'Carbon credits', text:'Disclose information about projects financed through purchase of carbon credits: (a) amount of carbon credits in tCO2eq verified against recognised quality standards and cancelled in reporting period; (b) amount purchased but not yet cancelled; (c) share from removal projects (%) with explanation of nature-based vs technological sinks.'},
-  {source:'esrs', type:'Criterion', id:'E1-11 para 36', chapter:'ESRS E1 Metrics', section:'Financial effects', text:'Disclose anticipated financial effects from material physical risks: (a) carrying amount of assets at material physical risk before considering adaptation actions, with time horizons; (b) percentage of carrying amount addressed by adaptation actions; (c) monetary amount of net revenue from business activities at material physical risk, with time horizons.'},
-  {source:'esrs', type:'Criterion', id:'E1-11 para 37', chapter:'ESRS E1 Metrics', section:'Transition risk financial effects', text:'Disclose anticipated financial effects from material transition risks: (a) carrying amount of assets at material transition risk, with time horizons, and estimated potential stranded assets until mid-term and long-term under a 1.5°C-aligned scenario; (b) percentage of carrying amount addressed by mitigation actions; (c) breakdown of carrying amount of real estate assets used as loan collaterals by energy-efficiency classes...'},
-
-  // CSRD Voluntary
-  {source:'csrd', type:'Criterion', id:'B3 para 33', chapter:'CSRD Voluntary', section:'GHG emissions', text:'The undertaking shall disclose its estimated absolute gross greenhouse gas (GHG) emissions generated during the reporting period in metric tonnes of CO2 equivalent (tCO2eq) considering the content of the GHG Protocol Corporate Accounting and Reporting Standard (2004), including: (a) the Scope 1 GHG emissions in tCO2eq (from owned or controlled sources); and (b) the location-based Scope 2 emissions in tCO2eq.'},
-  {source:'csrd', type:'Criterion', id:'C3', chapter:'CSRD Voluntary', section:'GHG reduction targets', text:'If the undertaking has established GHG emission reduction targets, it shall disclose its targets in absolute values for Scope 1 and Scope 2 emissions. In line with paragraphs 49 to 52 above and if it has set Scope 3 reduction targets, the undertaking shall also provide targets for significant Scope 3 emissions. In particular, it shall provide: (a) the target year and target year value; (b) the base year and base year value; (c) the units used for targets; (d) the share of Scope 1, Scope 2 and, if disclosed, Scope 3 that the target concerns; and (e) a list of main actions it seeks to implement to achieve its targets.'},
-  {source:'csrd', type:'Criterion', id:'C4', chapter:'CSRD Voluntary', section:'Climate risks', text:'If the undertaking has identified climate-related hazards and climate-related transition events, creating climate-related risks for the undertaking, it shall: (a) briefly describe such climate-related hazards and transition events; (b) disclose how it has assessed the exposure and sensitivity of its assets, activities and value chain; (c) disclose the time horizons; and (d) disclose whether it has undertaken climate change adaptation actions.'},
-  {source:'csrd', type:'Criterion', id:'para 49', chapter:'CSRD Voluntary', section:'Scope 3 guidance', text:'Depending on the type of activities carried out by the undertaking, disclosing a quantification of its Scope 3 GHG emissions can be appropriate to yield relevant information on the undertaking\'s value chain impacts on climate change. Undertakings operating with manufacturing, agrifood, real estate construction and packaging processes are likely to have significant Scope 3 categories.'},
-  {source:'csrd', type:'Criterion', id:'para 53', chapter:'CSRD Voluntary', section:'Target disclosure', text:'If the undertaking has established GHG emission reduction targets, it shall disclose its targets in absolute values for Scope 1 and Scope 2 emissions...'},
-];
-
-function runExplorer() {
-  const q = document.getElementById('expSearch').value.toLowerCase();
-  const t = document.getElementById('expType').value;
-  const s = document.getElementById('expSource').value;
-  const container = document.getElementById('explorerResults');
-  container.innerHTML = '';
-
-  const matches = explorerData.filter(item => {
-    const matchQ = !q || item.text.toLowerCase().includes(q) || item.id.toLowerCase().includes(q) || item.chapter.toLowerCase().includes(q) || item.section.toLowerCase().includes(q);
-    const matchT = !t || item.type === t;
-    const matchS = !s || item.source === s;
-    return matchQ && matchT && matchS;
-  }).slice(0, 20);
-
-  if (!matches.length) { container.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No results. Try a broader search.</p>'; return; }
-
-  matches.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'explorer-item';
-    const sourceLabel = item.source === 'sbti' ? 'SBTi' : item.source === 'esrs' ? 'ESRS' : 'CSRD';
-    const sourceColor = item.source === 'sbti' ? 'var(--sbti)' : item.source === 'esrs' ? 'var(--esrs)' : 'var(--csrd)';
-    el.innerHTML = `
-      <div class="item-header">
-        <span class="item-type ${item.type === 'Criterion' ? 'type-criterion' : 'type-rec'}">${item.type}</span>
-        <span class="item-id" style="color:${sourceColor}">${item.id}</span>
-        <span class="item-chapter">${item.chapter} · ${item.section}</span>
-        <span style="margin-left:auto;font-size:11px;color:${sourceColor};font-weight:600;">${sourceLabel}</span>
-      </div>
-      <div class="item-text">${item.text}</div>
-    `;
-    container.appendChild(el);
-  });
-}
-runExplorer();
+  window.filterChecklist = function() {
+    const s = document.getElementById('checklistSearch').value.toLowerCase();
+    const p = document.getElementById('priorityFilter').value;
+    const e = document.getElementById('effortFilter').value;
+    document.querySelectorAll('#checklistBody tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const pri = row.cells[8]?.textContent.trim() || '';
+      const eff = row.cells[7]?.textContent.trim() || '';
+      const show = text.includes(s) && (p === '' || pri === p) && (e === '' || eff === e);
+      row.style.display = show ? '' : 'none';
+    });
+  };
+})();
 </script>
 </body>
 </html>
