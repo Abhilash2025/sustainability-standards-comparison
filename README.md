@@ -4,9 +4,6 @@
 
 **Built:** 2026-07-04  
 **File:** `index.html` (single file, zero dependencies, no build step)  
-**Folder:** `/Users/abhilash/Desktop/SBTI_ESRS_webapp/`  
-**Design inspiration:** `https://sbti-v2.vercel.app` — dark, minimal, clean aesthetic with ambient particle background
-
 ---
 
 ## 1. What's in the Folder
