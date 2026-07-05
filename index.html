@@ -53,13 +53,13 @@ section+section{border-top:1px solid var(--border-subtle)}
 h1{font-size:42px;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
 h2{font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.01em;margin-bottom:16px}
 h3{font-size:18px;font-weight:600;margin:24px 0 10px}
-p{color:var(--text-secondary);margin-bottom:14px;max-width:720px}
-.lead{font-size:17px;color:var(--text-secondary);max-width:680px;margin-bottom:28px;line-height:1.6}
+p{color:var(--text-secondary);margin-bottom:14px;text-align:justify}
+.lead{font-size:17px;color:var(--text-secondary);margin-bottom:28px;line-height:1.6;text-align:justify}
 .meta{font-size:12px;color:var(--text-muted);margin-bottom:32px}
 
 #hero{min-height:60vh;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-elevated) 100%);text-align:center;align-items:center}
 #hero h1{max-width:800px}
-#hero .lead{max-width:720px;margin-left:auto;margin-right:auto}
+#hero .lead{margin-left:auto;margin-right:auto}
 #hero .hero-stats{display:flex;gap:48px;margin-top:32px;justify-content:center}
 .hero-stat strong{display:block;font-size:28px;font-weight:700;color:var(--text-primary)}
 .hero-stat span{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
@@ -110,6 +110,7 @@ tr:hover td{background:var(--bg-hover)}
 .score-block .score-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
 .score-sbti .score-num{color:var(--sbti)}
 .score-esrs .score-num{color:var(--esrs)}
+.score-csrd{color:var(--csrd)}
 .score-csrd .score-num{color:var(--csrd)}
 
 footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13px;color:var(--text-secondary);line-height:1.7;position:relative;z-index:1}
@@ -164,8 +165,9 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
     <a href="#matrix"><span class="num">06</span> Matrix</a>
     <a href="#checklist"><span class="num">07</span> Checklist</a>
     <a href="#practical"><span class="num">08</span> Implications</a>
-    <a href="sbti-map.html">SBTi Map</a>
-    <a href="esrs-map.html">ESRS Map</a>
+    <a href='/sbti-map'>SBTi Map</a>
+    <a href='/esrs-map'>ESRS Map</a>
+    <a href="csrd-map.html">Voluntary CSRD Map</a>
   </nav>
   <div class="topbar-actions">
     <button class="theme-btn" onclick="var h=document.documentElement;var t=h.getAttribute('data-theme');h.setAttribute('data-theme', t==='light'?'dark':'light');this.textContent=t==='light'?'Light':'Dark';">Light</button>
@@ -376,10 +378,7 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
     </div>
   </div>
 
-  <h3>ESRS E1-6 on targets — actual standard text</h3>
-  <div class="quote">"The undertaking shall disclose the GHG emission reduction targets it has set, including: (a) absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where relevant in intensity value, specifying which scopes are covered and the share related to each; (b) if the scope diverges from the GHG inventory (E1-8), the percentages for scopes 1, 2 and 3 covered by the target; (c) a statement on whether targets are science-based and compatible with limiting global warming to 1.5°C, stating which framework/methodology was used..."</div>
-  <p><strong>Interoperability note:</strong> SBTi-validated targets automatically satisfy ESRS E1-6 para 24(c). Companies must simply reference their SBTi validation in the ESRS disclosure.</p>
-</section>
+  </section>
 
 <!-- 04 Implementation -->
 <section id="implement">
@@ -452,33 +451,34 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Theme</th><th class="td-sbti">SBTi Depth</th><th class="td-esrs">ESRS Depth</th><th>Rationale / Notes</th></tr>
-      </thead>
+        <tr><th>Theme</th><th class="td-sbti">SBTi Depth</th><th class="td-esrs">ESRS Depth</th><th class="td-csrd">CSRD Voluntary</th><th>Rationale 
       <tbody>
-        <tr><td><strong>Governance &amp; accountability</strong></td><td>5</td><td>3</td><td>SBTi mandates board-level accountability specifically for climate targets (C1.1). ESRS 2 GOV-1 covers general sustainability governance.</td></tr>
-        <tr><td><strong>Transition plan detail</strong></td><td>5</td><td>4</td><td>SBTi C2.1–C2.5: 15-month publication, 5-year review, decarbonisation levers. ESRS E1-1 is detailed but does not prescribe ambition.</td></tr>
-        <tr><td><strong>Scope 1 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C10–C11 mandates absolute/intensity targets with sector-specific methods. ESRS E1-6 requires disclosure, not method prescription.</td></tr>
-        <tr><td><strong>Scope 2 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C12–C13 + C24 hourly matching exceeds ESRS E1-8 location/market-based requirement.</td></tr>
-        <tr><td><strong>Scope 3 target prescription</strong></td><td>5</td><td>3</td><td>SBTi C14–C16 mandates ≥67% coverage threshold. ESRS E1-8 is materiality-based.</td></tr>
-        <tr><td><strong>Net-zero target mandate</strong></td><td>5</td><td>2</td><td>SBTi C17.1–C17.4 mandates validated long-term net-zero by 2050. ESRS E1-1 references compatibility but does not mandate a standalone target.</td></tr>
-        <tr><td><strong>Base year / recalculation rules</strong></td><td>5</td><td>3</td><td>SBTi C4.1–C4.5 + C8.1–C8.7 have strict recalculation triggers (&gt;5% structural change). ESRS offers phased reliefs.</td></tr>
-        <tr><td><strong>Implementation hierarchy</strong></td><td>5</td><td>1</td><td>SBTi C21 is unique: direct abatement first, then market instruments. ESRS E1-5 discloses actions but prescribes no hierarchy.</td></tr>
-        <tr><td><strong>Carbon credit integrity criteria</strong></td><td>4</td><td>2</td><td>SBTi C25–C28 sets detailed integrity criteria (Core Carbon Principles, Oxford Offsetting Principles). ESRS E1-9 requires disclosure but does not mandate integrity criteria.</td></tr>
-        <tr><td><strong>Bioenergy / biomass rules</strong></td><td>4</td><td>2</td><td>SBTi C26 requires sustainability criteria for bio-based feedstocks and chain-of-custody. ESRS E1-8 only separates biogenic CO2.</td></tr>
-        <tr><td><strong>Hourly matching (Scope 2)</strong></td><td>5</td><td>1</td><td>SBTi C24 is the only framework with hourly matching for renewable electricity claims. ESRS E1-8 only requires location-based (mandatory) and market-based (optional).</td></tr>
-        <tr><td><strong>Third-party assurance / validation</strong></td><td>5</td><td>3</td><td>SBTi C7 requires target validation + limited assurance on GHG inventory + phased reasonable assurance. ESRS mandates limited assurance on the full sustainability statement.</td></tr>
-        <tr><td><strong>End-of-target-cycle assessment</strong></td><td>5</td><td>1</td><td>SBTi C26.1–C26.7 requires formal end-of-cycle assessment (achievement, gap analysis, next target). ESRS has no equivalent.</td></tr>
-        <tr><td><strong>Ongoing emissions responsibility</strong></td><td>4</td><td>2</td><td>SBTi OER programme and post-2035 responsibility. ESRS E1-9 covers credits/removals disclosure.</td></tr>
-        <tr><td><strong>Double materiality</strong></td><td>1</td><td>5</td><td>ESRS is built on double materiality (ESRS 1 Chapter 3). SBTi does not use materiality.</td></tr>
-        <tr><td><strong>Financial effects / climate risk</strong></td><td>2</td><td>4</td><td>ESRS E1-11 requires anticipated financial effects (physical &amp; transition risks, stranded assets). SBTi has no financial-effects requirement.</td></tr>
-        <tr><td><strong>Scenario analysis</strong></td><td>2</td><td>4</td><td>ESRS E1-2 requires scenario analysis (high-emission for physical, 1.5°C for transition). SBTi does not require scenario disclosure.</td></tr>
-        <tr><td><strong>Comparative information / reliefs</strong></td><td>2</td><td>4</td><td>ESRS 1 Chapter 7 + 10 has extensive transitional reliefs. SBTi has minimal reliefs.</td></tr>
-        <tr><td><strong>Deforestation-free supply chains</strong></td><td>5</td><td>2</td><td>SBTi C35.3 explicit prohibition + C35 certification. ESRS E4-2 mentions deforestation in biodiversity policies only.</td></tr>
-        <tr><td><strong>Investment actions (CapEx/OpEx)</strong></td><td>2</td><td>4</td><td>ESRS E1-1 para 12(b): CapEx-by-fuel-type mandatory. E1-5 para 46: financial resource quantification. SBTi mentions investments but no granular disclosure.</td></tr>
-        <tr><td><strong>Bioenergy and biofuel sourcing</strong></td><td>5</td><td>2</td><td>SBTi C35 comprehensive feedstock rules. ESRS E1-8 only separates biogenic CO2.</td></tr>
-        <tr><td><strong>Product attributes and traceability</strong></td><td>2</td><td>3</td><td>ESRS E4-2 para 13(a): product/component/raw material traceability. SBTi only for bio-based feedstocks.</td></tr>
-        <tr><td><strong>Claims framework</strong></td><td>5</td><td>2</td><td>SBTi formal Claims System (B.5). ESRS E1 implicitly constrains claims via disclosures. No positive claims framework.</td></tr>
-        <tr><td><strong>Market-based instruments in Scope 3</strong></td><td>4</td><td>1</td><td>SBTi C21–C25 allows scope 3 market instruments with integrity criteria. ESRS E1 is silent on scope 3 market instruments.</td></tr>
+        <tr><td><strong>Governance &amp; accountability</strong></td><td>5</td><td>3</td><td><span class="score-csrd">1</span></td><td>SBTi mandates board-level accountability specifically for climate targets (C1.1). ESRS 2 GOV-1 covers general sustainability governance. CSRD Voluntary B1 only asks for governance body name.</td></tr>
+        <tr><td><strong>Transition plan detail</strong></td><td>5</td><td>4</td><td><span class="score-csrd">2</span></td><td>SBTi C2.1–C2.5 requires 15-month publication, 5-year review, decarbonisation levers, CapEx, dependencies. ESRS E1-1 para 12 is detailed but does not prescribe ambition. CSRD Voluntary C3 is high-level.</td></tr>
+        <tr><td><strong>Scope 1 target prescription</strong></td><td>5</td><td>3</td><td><span class="score-csrd">2</span></td><td>SBTi C10–C11 mandates absolute/intensity targets with sector-specific methods (absolute contraction, sectoral pathways). ESRS E1-6 requires disclosure of targets, not prescription of methods. CSRD Voluntary C3 asks for targets without benchmarking.</td></tr>
+        <tr><td><strong>Scope 2 target prescription</strong></td><td>5</td><td>3</td><td><span class="score-csrd">2</span></td><td>SBTi C12–C13 + C24 hourly matching exceeds ESRS E1-8 location/market-based requirement. CSRD Voluntary B3 only requires location-based.</td></tr>
+        <tr><td><strong>Scope 3 target prescription</strong></td><td>5</td><td>3</td><td><span class="score-csrd">1</span></td><td>SBTi C14–C16 mandates ≥67% coverage threshold. ESRS E1-6/E1-8 is materiality-based. CSRD Voluntary B3 encourages Scope 3 but does not mandate.</td></tr>
+        <tr><td><strong>Net-zero target mandate</strong></td><td>5</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi C17.1–C17.4 mandates validated long-term net-zero by 2050. ESRS E1-1 references compatibility with net-zero but does not mandate a standalone target. CSRD Voluntary has none.</td></tr>
+        <tr><td><strong>Base year / recalculation rules</strong></td><td>5</td><td>3</td><td><span class="score-csrd">1</span></td><td>SBTi C4.1–C4.5 + C8.1–C8.7 have strict recalculation triggers (&gt;5% structural change). ESRS 1 Chapter 6 + 7.6 offer phased reliefs and restatement rules. CSRD Voluntary has no base-year rules.</td></tr>
+        <tr><td><strong>Implementation hierarchy</strong></td><td>5</td><td>1</td><td><span class="score-csrd">1</span></td><td>SBTi C21 is unique: direct abatement first, then market instruments. ESRS E1-5 discloses actions but prescribes no hierarchy. CSRD Voluntary C3 describes initiatives generically.</td></tr>
+        <tr><td><strong>Carbon credit integrity criteria</strong></td><td>4</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi C25–C28 sets detailed integrity criteria (Core Carbon Principles, Oxford Offsetting Principles, vintage limits). ESRS E1-9 requires disclosure of credits used but does not mandate integrity criteria. CSRD Voluntary is silent.</td></tr>
+        <tr><td><strong>Bioenergy / biomass rules</strong></td><td>4</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi C26 requires sustainability criteria for bio-based feedstocks and chain-of-custody. ESRS E1-8 only separates biogenic CO2 from gross emissions. CSRD Voluntary has no bioenergy criteria.</td></tr>
+        <tr><td><strong>Hourly matching (Scope 2)</strong></td><td>5</td><td>1</td><td><span class="score-csrd">1</span></td><td>SBTi C24 is the only framework with hourly matching for renewable electricity claims (same/adjacent bidding zone). ESRS E1-8 and CSRD Voluntary B3 do not mention hourly matching.</td></tr>
+        <tr><td><strong>Third-party assurance / validation</strong></td><td>5</td><td>3</td><td><span class="score-csrd">1</span></td><td>SBTi C7 requires target validation + limited assurance on GHG inventory + phased reasonable assurance. ESRS mandates limited assurance on sustainability statement (phased reasonable assurance). CSRD Voluntary has no assurance requirement.</td></tr>
+        <tr><td><strong>End-of-target-cycle assessment</strong></td><td>5</td><td>1</td><td><span class="score-csrd">1</span></td><td>SBTi C26.1–C26.7 requires formal end-of-cycle assessment (achievement, gap analysis, next target). ESRS and CSRD Voluntary have no equivalent.</td></tr>
+        <tr><td><strong>Ongoing emissions responsibility</strong></td><td>4</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi OER programme (voluntary but with integrity criteria) and post-2035 responsibility (C25–C28). ESRS E1-9 covers credits/removals disclosure. CSRD Voluntary is silent.</td></tr>
+        <tr><td><strong>Double materiality</strong></td><td>1</td><td>5</td><td><span class="score-csrd">2</span></td><td>ESRS is built on double materiality (ESRS 1 Chapter 3). SBTi does not use materiality — all criteria apply. CSRD Voluntary uses proportionate ‘if applicable’ principle, lighter than full double materiality.</td></tr>
+        <tr><td><strong>Financial effects / climate risk</strong></td><td>2</td><td>4</td><td><span class="score-csrd">2</span></td><td>ESRS E1-11 requires anticipated financial effects (physical &amp; transition risks, stranded assets). SBTi has no financial-effects requirement. CSRD Voluntary C4 covers climate risks but not financial quantification.</td></tr>
+        <tr><td><strong>Scenario analysis</strong></td><td>2</td><td>4</td><td><span class="score-csrd">1</span></td><td>ESRS E1-2 requires scenario analysis (high-emission for physical, 1.5°C for transition). SBTi does not require scenario disclosure. CSRD Voluntary has no scenario analysis requirement.</td></tr>
+        <tr><td><strong>Comparative information / reliefs</strong></td><td>2</td><td>4</td><td><span class="score-csrd">3</span></td><td>ESRS 1 Chapter 7 + 10 has extensive transitional reliefs and comparative info requirements. SBTi has minimal reliefs. CSRD Voluntary offers simplified comparatives and omission provisions.</td></tr>
+        <tr><td><strong>Deforestation-free supply chains</strong></td><td>5</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi C35.3 explicit prohibition + C35 certification. ESRS E4-2 AR 3 mentions deforestation in biodiversity policies only. CSRD Voluntary silent.</td></tr>
+        <tr><td><strong>Investment actions (CapEx/OpEx)</strong></td><td>2</td><td>4</td><td><span class="score-csrd">1</span></td><td>ESRS E1-1 para 12(b) CapEx-by-fuel-type mandatory; E1-5 para 46 financial resource quantification. SBTi C2.1 mentions investments but no granular disclosure. CSRD Voluntary C3 describes practices only.</td></tr>
+        <tr><td><strong>Bioenergy and biofuel sourcing</strong></td><td>5</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi C35 comprehensive feedstock rules (deforestation, data specificity, certification, chain-of-custody). ESRS E1-8 only separates biogenic CO2. CSRD Voluntary silent.</td></tr>
+        <tr><td><strong>Product attributes and traceability</strong></td><td>2</td><td>3</td><td><span class="score-csrd">1</span></td><td>ESRS E4-2 para 13(a) general product/component/raw material traceability for biodiversity. SBTi C35.2 only for bio-based feedstocks. CSRD Voluntary silent.</td></tr>
+        <tr><td><strong>Claims framework</strong></td><td>5</td><td>2</td><td><span class="score-csrd">1</span></td><td>SBTi formal Claims System (B.5) with validation, progress, net-zero claim rules. ESRS E1 implicitly constrains claims via disclosures. CSRD Voluntary silent.</td></tr>
+        <tr><td><strong>Market-based instruments in Scope 3</strong></td><td>4</td><td>1</td><td><span class="score-csrd">1</span></td><td>SBTi C21-C25 allows scope 3 market instruments with integrity criteria. ESRS E1-8 gross scope 3 only; E1-9 carbon credit disclosure only. CSRD Voluntary silent.</td></tr>
+        <tr><td><strong>Total depth (sum of 24 themes)</strong></td><td><strong>91</strong></td><td><strong>65</strong></td><td><strong><span class="score-csrd">31</span></strong></td><td>—</td></tr>
+      </tbody>t instruments.</td></tr>
       </tbody>
     </table>
   </div>
@@ -491,38 +491,39 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
       <div class="card-header"><div>
         <div class="card-tag">Criteria Map</div>
         <div class="card-title">Full criteria-to-theme mapping</div>
-        <div class="card-lead">Click to expand the complete SBTi Criteria → ESRS E1 mapping for all 24 themes.</div>
+        <div class="card-lead">Click to expand the complete SBTi Criteria → ESRS E1 &amp; CSRD Voluntary mapping for all 24 themes.</div>
       </div></div>
       <div class="card-body">
         <div class="table-wrap">
           <table style="font-size:12px">
-            <thead><tr><th>Theme</th><th>SBTi Criteria IDs</th><th>ESRS E1/E4 Reference</th></tr></thead>
-            <tbody>
-              <tr><td>Governance &amp; accountability</td><td>C1.1, C1.2, C1.3, R1.1, R1.2</td><td>ESRS 2 GOV-1; GOV-5</td></tr>
-              <tr><td>Transition plan detail</td><td>C2.1–C2.5, R2.1–R2.4</td><td>E1-1, paras 11–13; ESRS 2 SBM-3</td></tr>
-              <tr><td>Scope 1 targets</td><td>C10.1–C10.4, C11.1–C11.4, R11.1</td><td>E1-6, paras 24–29; E1-8</td></tr>
-              <tr><td>Scope 2 targets</td><td>C12.1–C12.4, C13.1–C13.2, C24.1–C24.3</td><td>E1-6; E1-8</td></tr>
-              <tr><td>Scope 3 targets</td><td>C14.1–C14.3, C15.1–C15.4, C16.1–C16.3</td><td>E1-6; E1-8; ESRS 1 para AR 24</td></tr>
-              <tr><td>Net-zero targets</td><td>C17.1–C17.4, R17.1</td><td>E1-1; E1-6</td></tr>
+            <thead><tr><th>Theme</th><th>SBTi Criteria IDs</th><th>ESRS E1/E4 Reference</th><th>CSRD Voluntary Ref</th></tr></thead>
+            
+              <tbody>
+              <tr><td>Governance &amp; accountability</td><td>C1.1, C1.2, C1.3, R1.1, R1.2</td><td>ESRS 2 GOV-1; GOV-5</td><td>B1</td></tr>
+              <tr><td>Transition plan detail</td><td>C2.1–C2.5, R2.1–R2.4</td><td>E1-1, paras 11–13; ESRS 2 SBM-3</td><td>C3</td></tr>
+              <tr><td>Scope 1 targets</td><td>C10.1–C10.4, C11.1–C11.4, R11.1</td><td>E1-6, paras 24–29; E1-8</td><td>C3</td></tr>
+              <tr><td>Scope 2 targets</td><td>C12.1–C12.4, C13.1–C13.2, C24.1–C24.3</td><td>E1-6; E1-8</td><td>B3</td></tr>
+              <tr><td>Scope 3 targets</td><td>C14.1–C14.3, C15.1–C15.4, C16.1–C16.3</td><td>E1-6; E1-8; ESRS 1 para AR 24</td><td>B3</td></tr>
+              <tr><td>Net-zero targets</td><td>C17.1–C17.4, R17.1</td><td>E1-1; E1-6</td><td>None</td></tr>
               <tr><td>Base year / recalculation</td><td>C4.1–C4.5, R4.1, C8.1–C8.7</td><td>ESRS 1 Chapter 6; E1-6</td><td>None</td></tr>
-              <tr><td>Implementation hierarchy</td><td>C21.1–C21.3, R21.1</td><td>None</td></tr>
-              <tr><td>Carbon credit integrity</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1</td><td>E1-9, paras 39–44</td></tr>
+              <tr><td>Implementation hierarchy</td><td>C21.1–C21.3, R21.1</td><td>None</td><td>C3</td></tr>
+              <tr><td>Carbon credit integrity</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1</td><td>E1-9, paras 39–44</td><td>None</td></tr>
               <tr><td>Bioenergy / biomass</td><td>C26.1–C26.7, C35.1–C35.7</td><td>E1-8, para 31; E4-2 AR 3</td><td>None</td></tr>
-              <tr><td>Hourly matching</td><td>C24.1, C24.2, C24.3</td><td>None</td></tr>
+              <tr><td>Hourly matching</td><td>C24.1, C24.2, C24.3</td><td>None</td><td>B3</td></tr>
               <tr><td>Third-party assurance</td><td>C7.1–C7.5</td><td>ESRS 1 para 8.2; Directive 2013/34/EU Art 19a/29a</td><td>None</td></tr>
-              <tr><td>End-of-target-cycle</td><td>C26.1–C26.7</td><td>None</td></tr>
-              <tr><td>Ongoing emissions responsibility</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1 (OER)</td><td>E1-9, paras 39–44; E1-6</td></tr>
-              <tr><td>Double materiality</td><td>Not used</td><td>ESRS 1 Chapter 3</td></tr>
-              <tr><td>Financial effects</td><td>Not addressed</td><td>E1-11, paras 36–38</td></tr>
-              <tr><td>Scenario analysis</td><td>Not required</td><td>E1-2, para 17</td></tr>
-              <tr><td>Comparative info / reliefs</td><td>Minimal reliefs</td><td>ESRS 1 Chapter 7 + 10</td><td>Simplified comparatives</td></tr>
-              <tr><td>Deforestation-free supply chains</td><td>C35.1–C35.7, C9.8</td><td>E4-2 AR 3; E1-8 para 31</td></tr>
-              <tr><td>Investment actions (CapEx/OpEx)</td><td>C2.1 (mentions phase-out)</td><td>E1-1 para 12(b); E1-5 para 46; E1-11</td><td>None</td></tr>
+              <tr><td>End-of-target-cycle</td><td>C26.1–C26.7</td><td>None</td><td>None</td></tr>
+              <tr><td>Ongoing emissions responsibility</td><td>C25.1–C25.7, C26.1–C26.7, C27.1–C27.5, C28.1–C28.2, R27.1 (OER)</td><td>E1-9, paras 39–44; E1-6</td><td>None</td></tr>
+              <tr><td>Double materiality</td><td>Not used</td><td>ESRS 1 Chapter 3</td><td>None</td></tr>
+              <tr><td>Financial effects</td><td>Not addressed</td><td>E1-11, paras 36–38</td><td>C4</td></tr>
+              <tr><td>Scenario analysis</td><td>Not required</td><td>E1-2, para 17</td><td>None</td></tr>
+              <tr><td>Comparative info / reliefs</td><td>Minimal reliefs</td><td>ESRS 1 Chapter 7 + 10</td><td>None</td></tr>
+              <tr><td>Deforestation-free supply chains</td><td>C35.1–C35.7, C9.8</td><td>E4-2 AR 3; E1-8 para 31</td><td>None</td></tr>
+              <tr><td>Investment actions (CapEx/OpEx)</td><td>C2.1 (mentions phase-out)</td><td>E1-1 para 12(b); E1-5 para 46; E1-11</td><td>C3</td></tr>
               <tr><td>Bioenergy / biofuel sourcing</td><td>C35.1–C35.7, C5 (biogenic separation)</td><td>E1-8 para 31; E4-2 AR 3</td><td>None</td></tr>
-              <tr><td>Product traceability</td><td>C35.2 (bio-based only)</td><td>E4-2 para 13(a)</td></tr>
-              <tr><td>Claims framework</td><td>B.5 Claims System</td><td>E1-6 para 24 (gross); E1-9 (credits)</td></tr>
-              <tr><td>Market instruments in Scope 3</td><td>C21–C25, C25.5–C25.7</td><td>E1-8 (gross); E1-9 (carbon credits only)</td></tr>
-            </tbody>
+              <tr><td>Product traceability</td><td>C35.2 (bio-based only)</td><td>E4-2 para 13(a)</td><td>None</td></tr>
+              <tr><td>Claims framework</td><td>B.5 Claims System</td><td>E1-6 para 24 (gross); E1-9 (credits)</td><td>None</td></tr>
+              <tr><td>Market instruments in Scope 3</td><td>C21–C25, C25.5–C25.7</td><td>E1-8 (gross); E1-9 (carbon credits only)</td><td>None</td></tr>
+              </tbody>
           </table>
         </div>
         <p><strong>Methodology:</strong> Each theme was scored by reading operative provisions line-by-line. For SBTi: criteria (C) and recommendations (R) mapped. For ESRS E1: disclosure requirements (E1-1 to E1-11) and general requirements (ESRS 1, ESRS 2 GDRs) mapped. Scores cross-checked against extracted structured data (JSON criteria maps). No scores inferred from secondary sources.</p>
@@ -804,13 +805,7 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
 </section>
 
 <!-- Footer -->
-<footer>
-  <p><strong>Sources:</strong> (a) SBTi Corporate Net-Zero Standard V2.0 (June 2026); (b) Revised ESRS June 2026 — Commission Delegated Regulation C(2026) 5010, Annex I (ESRS E1); (c) Commission Delegated Regulation (EU) 2026/5011 Annex — Voluntary Standard for undertakings below 1,000 employees. Scores and mappings are grounded in operative provisions read line-by-line. No scores inferred from secondary sources.</p>
-  <div class="disclaimer-box">
-    <strong>Disclaimer</strong>
-    This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual documents for complete understanding of the details with the right context. ESRS depth is sometimes distributed across multiple disclosure requirements (e.g., governance in ESRS 2, targets in E1-6), which may understate apparent depth if viewed only through E1. CSRD Voluntary Annex is proportionate by design; low scores reflect intent, not deficiency. Timelines and effort estimates are directional, not prescriptive. National transposition of CSRD and sector-specific guidance (e.g., banks, insurers) may add requirements not captured here.
-  </div>
-</footer>
+
 
 </main>
 
@@ -863,5 +858,11 @@ footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13p
   };
 })();
 </script>
+
+
+<div class="disclaimer-box" style="margin:48px auto;max-width:1100px;padding:24px 32px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text-secondary);line-height:1.6">
+  <strong style="color:var(--text);display:block;margin-bottom:8px;font-size:14px">Disclaimer</strong>
+  This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual documents for complete understanding of the details with the right context. ESRS depth is sometimes distributed across multiple disclosure requirements (e.g., governance in ESRS 2, targets in E1-6), which may understate apparent depth if viewed only through E1. CSRD Voluntary Annex is proportionate by design; low scores reflect intent, not deficiency. Timelines and effort estimates are directional, not prescriptive. National transposition of CSRD and sector-specific guidance (e.g., banks, insurers) may add requirements not captured here.
+</div>
 </body>
 </html>

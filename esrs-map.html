@@ -1,276 +1,775 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESRS E1 Climate Change — Disclosure Requirements Map</title>
-<style>
-:root{ --bg:#0a0a0a; --bg-elevated:#111111; --bg-card:#141414; --bg-hover:#1a1a1a;
-  --border:#262626; --border-subtle:#1c1c1c; --text-primary:#f5f5f5; --text-secondary:#a3a3a3; --text-muted:#737373;
-  --accent:#14b8a6; --accent-soft:rgba(20,184,166,0.12); --accent-glow:rgba(20,184,166,0.25);
-  --sbti:#3b82f6; --esrs:#f97316;
-  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --font-mono:"SF Mono",Monaco,"Inconsolata","Fira Code",monospace;
-  --radius:12px; --radius-sm:8px; }
-[data-theme="light"]{ --bg:#ffffff; --bg-elevated:#f8f8f8; --bg-card:#f5f5f5; --bg-hover:#eeeeee;
-  --border:#e0e0e0; --border-subtle:#f0f0f0; --text-primary:#111111; --text-secondary:#444444; --text-muted:#888888;
-  --accent:#0d9488; --accent-soft:rgba(13,148,136,0.08); --accent-glow:rgba(13,148,136,0.15);
-  --sbti:#2563eb; --esrs:#ea580c; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESRS E1 Climate Change — Disclosure Requirements Map</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-elevated: #111111;
+      --bg-card: #141414;
+      --bg-hover: #1a1a1a;
+      --border: #262626;
+      --border-subtle: #1c1c1c;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      --accent: #14b8a6;
+      --accent-soft: rgba(20, 184, 166, 0.12);
+      --accent-glow: rgba(20, 184, 166, 0.25);
+      --sbti: #3b82f6;
+      --esrs: #f97316;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "SF Mono", Monaco, "Inconsolata", "Fira Code", monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary);line-height:1.55;font-size:15px;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:60px}
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --bg-elevated: #f8f8f8;
+      --bg-card: #f5f5f5;
+      --bg-hover: #eeeeee;
+      --border: #e0e0e0;
+      --border-subtle: #f0f0f0;
+      --text-primary: #111111;
+      --text-secondary: #444444;
+      --text-muted: #888888;
+      --accent: #0d9488;
+      --accent-soft: rgba(13, 148, 136, 0.08);
+      --accent-glow: rgba(13, 148, 136, 0.15);
+      --sbti: #2563eb;
+      --esrs: #ea580c;
+    }
 
-.topbar{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border-subtle);z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
-[data-theme="light"] .topbar{background:rgba(255,255,255,0.92)}
-.topbar-brand{font-size:13px;font-weight:700;letter-spacing:0.04em;color:var(--text-primary);white-space:nowrap}
-.topbar-brand span{color:var(--accent)}
-.topbar-nav{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.topbar-nav::-webkit-scrollbar{display:none}
-.topbar-nav a{padding:6px 10px;border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);text-decoration:none;
-  transition:all .15s ease;white-space:nowrap;border:1px solid transparent;font-weight:500}
-.topbar-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}
-.topbar-nav a.active{color:var(--accent);background:var(--accent-soft);border-color:var(--accent)}
-.theme-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:5px 12px;border-radius:var(--radius-sm);font-size:11px;cursor:pointer;font-family:var(--font-sans);letter-spacing:0.04em}
-.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-section{padding:72px 48px;max-width:1100px;margin:0 auto;position:relative;z-index:1}
-section+section{border-top:1px solid var(--border-subtle)}
-.section-label{font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block}
-h1{font-size:42px;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
-h2{font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.01em;margin-bottom:16px}
-h3{font-size:18px;font-weight:600;margin:24px 0 10px}
-p{color:var(--text-secondary);margin-bottom:14px;max-width:720px}
-.lead{font-size:17px;color:var(--text-secondary);max-width:680px;margin-bottom:28px;line-height:1.6}
-.meta{font-size:12px;color:var(--text-muted);margin-bottom:32px}
+    html {
+      scroll-behavior: smooth
+    }
 
-#hero{min-height:40vh;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-elevated) 100%);text-align:center;align-items:center}
-#hero h1{max-width:800px}
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.55;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      padding-top: 60px
+    }
 
-.card-list{display:flex;flex-direction:column;gap:14px;margin:24px 0}
-.dr-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all .2s ease;position:relative}
-.dr-card:hover{border-color:var(--accent)}
-.dr-card.open{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 32px var(--accent-glow)}
-.dr-card .card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.dr-card .card-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px}
-.dr-card .card-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
-.dr-card .card-lead{font-size:13px;color:var(--text-secondary)}
-.dr-card .card-body{display:none;font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:16px;margin-top:14px;line-height:1.65}
-.dr-card.open .card-body{display:block}
-.dr-card .card-body .quote{background:var(--bg-elevated);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--text-secondary);margin:12px 0}
-.dr-card .card-body p{margin-bottom:10px}
-.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em;margin-right:4px}
-.badge-strategy{background:rgba(59,130,246,0.12);color:var(--sbti);border:1px solid rgba(59,130,246,0.25)}
-.badge-impact{background:rgba(20,184,166,0.12);color:var(--accent);border:1px solid rgba(20,184,166,0.25)}
-.badge-metrics{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)}
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px
+    }
 
-.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin:24px 0}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:12px 14px;text-align:left;vertical-align:top}
-th{background:var(--bg-elevated);color:var(--text-muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border)}
-td{border-bottom:1px solid var(--border-subtle);color:var(--text-secondary)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg-hover)}
+    [data-theme="light"] .topbar {
+      background: rgba(255, 255, 255, 0.92)
+    }
 
-footer{padding:48px 48px;border-top:1px solid var(--border-subtle);font-size:13px;color:var(--text-secondary);line-height:1.7;position:relative;z-index:1}
-.disclaimer-box{padding:18px 22px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);line-height:1.65;margin-top:20px}
-.disclaimer-box strong{color:var(--accent);display:block;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.08em}
+    .topbar-brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      white-space: nowrap
+    }
 
-@media (max-width:900px){section{padding:40px 20px} .topbar{padding:0 16px} .topbar-brand{display:none}}
-</style>
+    .topbar-brand span {
+      color: var(--accent)
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none
+    }
+
+    .topbar-nav::-webkit-scrollbar {
+      display: none
+    }
+
+    .topbar-nav a {
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all .15s ease;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      font-weight: 500
+    }
+
+    .topbar-nav a:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover)
+    }
+
+    .topbar-nav a.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-color: var(--accent)
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      letter-spacing: 0.04em
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    section {
+      padding: 72px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1
+    }
+
+    section+section {
+      border-top: 1px solid var(--border-subtle)
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 24px 0 10px
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      text-align: justify
+    }
+
+    .lead {
+      font-size: 17px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.6;
+      text-align: justify
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 32px
+    }
+
+    #hero {
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 100%);
+      text-align: center;
+      align-items: center
+    }
+
+    #hero h1 {
+      max-width: 800px
+    }
+
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 24px 0
+    }
+
+    .dr-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      cursor: pointer;
+      transition: all .2s ease;
+      position: relative
+    }
+
+    .dr-card:hover {
+      border-color: var(--accent)
+    }
+
+    .dr-card.open {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 8px 32px var(--accent-glow)
+    }
+
+    .dr-card .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .dr-card .card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 6px
+    }
+
+    .dr-card .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px
+    }
+
+    .dr-card .card-lead {
+      font-size: 13px;
+      color: var(--text-secondary)
+    }
+
+    .dr-card .card-body {
+      display: none;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 14px;
+      line-height: 1.65
+    }
+
+    .dr-card.open .card-body {
+      display: block
+    }
+
+    .dr-card .card-body .quote {
+      background: var(--bg-elevated);
+      border-left: 3px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin: 12px 0
+    }
+
+    .dr-card .card-body p {
+      margin-bottom: 10px
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px
+    }
+
+    .badge-strategy {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--sbti);
+      border: 1px solid rgba(59, 130, 246, 0.25)
+    }
+
+    .badge-impact {
+      background: rgba(20, 184, 166, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(20, 184, 166, 0.25)
+    }
+
+    .badge-metrics {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35)
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 24px 0
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top
+    }
+
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border)
+    }
+
+    td {
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary)
+    }
+
+    tr:last-child td {
+      border-bottom: none
+    }
+
+    tr:hover td {
+      background: var(--bg-hover)
+    }
+
+    footer {
+      padding: 48px 48px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      position: relative;
+      z-index: 1
+    }
+
+    .disclaimer-box {
+      padding: 18px 22px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-top: 20px
+    }
+
+    .disclaimer-box strong {
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em
+    }
+
+    @media (max-width:900px) {
+      section {
+        padding: 40px 20px
+      }
+
+      .topbar {
+        padding: 0 16px
+      }
+
+      .topbar-brand {
+        display: none
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="topbar" id="topbar">
-  <div class="topbar-brand">ESRS <span>E1 Map</span></div>
-  <nav class="topbar-nav">
-    <a href="index.html">← Home</a>
-    <a href="sbti-map.html">SBTi Criteria Map</a>
-  </nav>
-  <div class="topbar-actions">
-    <button class="theme-btn" onclick="(function(){var h=document.documentElement;var t=h.getAttribute('data-theme');h.setAttribute('data-theme',t==='light'?'dark':'light');})()">Light</button>
-  </div>
-</header>
+  <header class="topbar" id="topbar">
+    <div class="topbar-brand">ESRS <span>E1 Map</span></div>
+    <nav class="topbar-nav">
+      <a href="index.html">← Home</a>
+      <a href="sbti-map.html">SBTi Criteria Map</a>
+      <a href="csrd-map.html">Voluntary CSRD Map</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="theme-btn"
+        onclick="(function(){var h=document.documentElement;var t=h.getAttribute('data-theme');h.setAttribute('data-theme',t==='light'?'dark':'light');})()">Light</button>
+    </div>
+  </header>
 
-<main>
+  <main>
 
-<section id="hero">
-  <h1>ESRS E1 Climate Change</h1>
-  <p class="lead">Complete disclosure requirements map. All operative text reproduced directly from the standard. Covers E1-1 through E1-11 with objectives, key requirements, and interlinkages.</p>
-  <p class="meta">Source: Revised ESRS June 2026 (Commission Delegated Regulation C(2026) 5010), Annex I · Extracted from Gap_Action_Checklist_SBTi_to_ESRS_v3.xlsx</p>
-</section>
+    <section id="hero">
+      <h1>ESRS E1 Climate Change</h1>
+      <p class="lead">Complete disclosure requirements map. All operative text reproduced directly from the standard.
+        Covers E1-1 through E1-11 with objectives, key requirements, and interlinkages.</p>
+    </section>
 
-<section id="esrs-e1">
-  <span class="section-label">11 Disclosure Requirements</span>
-  <h2>ESRS E1 Disclosure Requirements (E1-1 to E1-11)</h2>
-  <div class="card-list">
+    <section id="esrs-e1">
+      <span class="section-label">11 Disclosure Requirements</span>
+      <h2>ESRS E1 Disclosure Requirements (E1-1 to E1-11)</h2>
+      <div class="card-list">
 
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-1 · Transition plan for climate change mitigation</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s past, current and future mitigation efforts ...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-1 · Transition plan for climate change mitigation</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s past,
+                current and future mitigation efforts ...</div>
+            </div>
+            <div><span class="badge badge-strategy">Strategy</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s
+              past, current and future mitigation efforts to ensure that its strategy and business model are compatible
+              with the transition to a sustainable economy and with limiting global warming to 1.5°C in line with the
+              Paris Agreement and the objectives of the European Climate Law (Regulation (EU) 2021/1119), including
+              achieving climate neutrality by 2050.</p>
+            <div class="quote">The information about the transition plan for climate change mitigation shall include:
+              (a) a description of its key features, including GHG emission reduction targets, decarbonisation levers,
+              key actions, investments and funding, approval by administrative/management/supervisory bodies, and how
+              the plan is embedded in overall business strategy; (b) CapEx amounts invested during the reporting period
+              related to coal, oil and gas economic activities; (c) information about key assumptions used and
+              dependencies; (d) a qualitative assessment of how potential locked-in GHG emissions from key physical
+              assets and products may jeopardise achievement of the plan and drive transition risk; and (e) an
+              explanation of progress in implementing the transition plan. If the undertaking does not have a transition
+              plan, it shall disclose this fact and indicate whether and, if so, when it expects to adopt one.</div>
+            <p><strong>Target Requirements:</strong> Paragraph 12(a) requires disclosure of GHG emission reduction
+              targets as part of the transition plan’s key features.</p>
+            <p><strong>GHG Requirements:</strong> Paragraph 12(d) requires a qualitative assessment of locked-in GHG
+              emissions from key physical assets/products.</p>
+            <p><strong>Transition Plan Link:</strong> Core DR: Paragraphs 11–13 and AR 1–5 set out detailed requirements
+              for the transition plan, including key features (targets, decarbonisation levers, actions, investments,
+              funding, board approval, alignment with 1.5°C and EU climate neutrality by 2050), CapEx for fossil
+              activities, assumptions/dependencies, locked-in emissions assessment, and progress reporting.</p>
+          </div>
         </div>
-        <div><span class="badge badge-strategy">Strategy</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s past, current and future mitigation efforts to ensure that its strategy and business model are compatible with the transition to a sustainable economy and with limiting global warming to 1.5°C in line with the Paris Agreement and the objectives of the European Climate Law (Regulation (EU) 2021/1119), including achieving climate neutrality by 2050.</p>
-        <div class="quote">The information about the transition plan for climate change mitigation shall include: (a) a description of its key features, including GHG emission reduction targets, decarbonisation levers, key actions, investments and funding, approval by administrative/management/supervisory bodies, and how the plan is embedded in overall business strategy; (b) CapEx amounts invested during the reporting period related to coal, oil and gas economic activities; (c) information about key assumptions used and dependencies; (d) a qualitative assessment of how potential locked-in GHG emissions from key physical assets and products may jeopardise achievement of the plan and drive transition risk; and (e) an explanation of progress in implementing the transition plan. If the undertaking does not have a transition plan, it shall disclose this fact and indicate whether and, if so, when it expects to adopt one.</div>
-        <p><strong>Target Requirements:</strong> Paragraph 12(a) requires disclosure of GHG emission reduction targets as part of the transition plan’s key features.</p><p><strong>GHG Requirements:</strong> Paragraph 12(d) requires a qualitative assessment of locked-in GHG emissions from key physical assets/products.</p><p><strong>Transition Plan Link:</strong> Core DR: Paragraphs 11–13 and AR 1–5 set out detailed requirements for the transition plan, including key features (targets, decarbonisation levers, actions, investments, funding, board approval, alignment with 1.5°C and EU climate neutrality by 2050), CapEx for fossil activities, assumptions/dependencies, locked-in emissions assessment, and progress reporting.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-2 · Identification of climate-related risks and scenario analysis</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of how the undertaking identifies and assesses climate-related ri...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-2 · Identification of climate-related risks and scenario analysis</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of how the undertaking
+                identifies and assesses climate-related ri...</div>
+            </div>
+            <div><span class="badge badge-strategy">Strategy</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of how the undertaking
+              identifies and assesses climate-related risks and opportunities for financial materiality.</p>
+            <div class="quote">The undertaking shall explain for each material climate-related risk whether it
+              classifies the risk as a climate-related physical risk or a climate-related transition risk. In addition
+              to ESRS 2 IRO-1, the undertaking shall disclose key elements of the methodology used to assess how assets
+              and business activities may be exposed and sensitive over short, medium and long term to climate-related
+              hazards and climate-related transition events/trends. If climate-related scenario analysis is used,
+              disclose: ranges of scenarios (including at least one high-emission scenario for physical risks and at
+              least one 1.5°C-aligned scenario for transition risks), associated temperature projections, scope of
+              operations, key assumptions, and time period when carried out.</div>
+
+          </div>
         </div>
-        <div><span class="badge badge-strategy">Strategy</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of how the undertaking identifies and assesses climate-related risks and opportunities for financial materiality.</p>
-        <div class="quote">The undertaking shall explain for each material climate-related risk whether it classifies the risk as a climate-related physical risk or a climate-related transition risk. In addition to ESRS 2 IRO-1, the undertaking shall disclose key elements of the methodology used to assess how assets and business activities may be exposed and sensitive over short, medium and long term to climate-related hazards and climate-related transition events/trends. If climate-related scenario analysis is used, disclose: ranges of scenarios (including at least one high-emission scenario for physical risks and at least one 1.5°C-aligned scenario for transition risks), associated temperature projections, scope of operations, key assumptions, and time period when carried out.</div>
-        
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-3 · Resilience in relation to climate change</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of the extent to which the undertaking’s strategy and business mo...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-3 · Resilience in relation to climate change</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of the extent to which the
+                undertaking’s strategy and business mo...</div>
+            </div>
+            <div><span class="badge badge-strategy">Strategy</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the extent to which
+              the undertaking’s strategy and business model are prepared for, and can adapt to, material climate-related
+              risks.</p>
+            <div class="quote">In addition to ESRS 2 SBM-3, disclose: (a) results of climate resilience analysis,
+              implications for strategy/business model, how scenario analysis informs response, and how transition plan
+              and mitigation/adaptation actions (E1-5) contribute to resilience; (b) significant areas of uncertainty;
+              (c) capacity to adjust or adapt strategy and business model over short, medium and long term.</div>
+            <p><strong>Transition Plan Link:</strong> AR 8–10 link resilience assessment to the transition plan (E1-1)
+              and mitigation/adaptation actions (E1-5).</p>
+          </div>
         </div>
-        <div><span class="badge badge-strategy">Strategy</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the extent to which the undertaking’s strategy and business model are prepared for, and can adapt to, material climate-related risks.</p>
-        <div class="quote">In addition to ESRS 2 SBM-3, disclose: (a) results of climate resilience analysis, implications for strategy/business model, how scenario analysis informs response, and how transition plan and mitigation/adaptation actions (E1-5) contribute to resilience; (b) significant areas of uncertainty; (c) capacity to adjust or adapt strategy and business model over short, medium and long term.</div>
-        <p><strong>Transition Plan Link:</strong> AR 8–10 link resilience assessment to the transition plan (E1-1) and mitigation/adaptation actions (E1-5).</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-4 · Policies related to climate change mitigation and adaptation</div>
-          <div class="card-lead"></div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-4 · Policies related to climate change mitigation and adaptation</div>
+              <div class="card-lead"></div>
+            </div>
+            <div><span class="badge badge-impact">Impact, risk and opportunity management</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> </p>
+            <div class="quote">The undertaking shall disclose its climate change mitigation and climate change
+              adaptation policies in accordance with the provisions of ESRS 2 GDR-P.</div>
+
+          </div>
         </div>
-        <div><span class="badge badge-impact">Impact, risk and opportunity management</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> </p>
-        <div class="quote">The undertaking shall disclose its climate change mitigation and climate change adaptation policies in accordance with the provisions of ESRS 2 GDR-P.</div>
-        
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-5 · Actions and resources in relation to climate change mitigation and adaptation</div>
-          <div class="card-lead"></div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-5 · Actions and resources in relation to climate change mitigation and adaptation
+              </div>
+              <div class="card-lead"></div>
+            </div>
+            <div><span class="badge badge-impact">Impact, risk and opportunity management</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> </p>
+            <div class="quote">The undertaking shall disclose its key climate change mitigation and climate change
+              adaptation actions and resources allocated to their implementation, in accordance with ESRS 2 GDR-A. In
+              addition to ESRS 2 GDR-A, when disclosing current and planned actions, the undertaking shall disclose: (a)
+              its key climate change mitigation actions by decarbonisation lever; and (b) the achieved and expected GHG
+              emission reduction by decarbonisation lever.</div>
+            <p><strong>GHG Requirements:</strong> Paragraph 22(b) requires disclosure of achieved and expected GHG
+              emission reductions by decarbonisation lever.</p>
+            <p><strong>Transition Plan Link:</strong> Actions and resources support the transition plan (E1-1);
+              decarbonisation levers and GHG reductions are linked to transition plan implementation.</p>
+          </div>
         </div>
-        <div><span class="badge badge-impact">Impact, risk and opportunity management</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> </p>
-        <div class="quote">The undertaking shall disclose its key climate change mitigation and climate change adaptation actions and resources allocated to their implementation, in accordance with ESRS 2 GDR-A. In addition to ESRS 2 GDR-A, when disclosing current and planned actions, the undertaking shall disclose: (a) its key climate change mitigation actions by decarbonisation lever; and (b) the achieved and expected GHG emission reduction by decarbonisation lever.</div>
-        <p><strong>GHG Requirements:</strong> Paragraph 22(b) requires disclosure of achieved and expected GHG emission reductions by decarbonisation lever.</p><p><strong>Transition Plan Link:</strong> Actions and resources support the transition plan (E1-1); decarbonisation levers and GHG reductions are linked to transition plan implementation.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-6 · Targets related to climate change</div>
-          <div class="card-lead"></div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-6 · Targets related to climate change</div>
+              <div class="card-lead"></div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> </p>
+            <div class="quote">The undertaking shall disclose its climate change targets in accordance with ESRS 2
+              GDR-T. The undertaking shall disclose the GHG emission reduction targets it has set, including: (a)
+              absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where
+              relevant in intensity value, specifying which scopes are covered and the share related to each; (b) if the
+              scope (geography, GHGs covered, entities included) diverges from the GHG inventory (E1-8), the percentages
+              for scopes 1, 2 and 3 covered by the target and which GHGs are covered; (c) a statement on whether targets
+              are science-based and compatible with limiting global warming to 1.5°C, stating which
+              framework/methodology was used, whether derived using a sectoral decarbonisation pathway, and underlying
+              climate/policy scenarios; and brief explanation of how future developments (sales volumes, customer
+              preferences, regulatory factors, new technologies) were considered.</div>
+            <p><strong>Target Requirements:</strong> Paragraph 24 is the core requirement: absolute GHG emission
+              reduction targets for scopes 1, 2, 3 (separately or combined), intensity values where relevant,
+              science-based/1.5°C compatibility statement, framework/methodology, sectoral pathway, and consideration of
+              future developments. AR 12 clarifies targets shall be gross targets—GHG removals, carbon credits or
+              avoided emissions shall not be included as means of achieving targets. AR 13 sets out intensity target
+              formulation and associated absolute values. AR 14 addresses baseline/base year. AR 15 allows presentation
+              of targets together with mitigation actions. AR 16 requires consistent reporting boundary with E1-8. AR 17
+              requires comparison with 1.5°C-aligned reference target values.</p>
+            <p><strong>GHG Requirements:</strong> Targets relate to gross GHG emission reductions for scopes 1, 2 and 3;
+              AR 12 specifies gross targets (no removals, carbon credits or avoided emissions).</p>
+            <p><strong>Carbon Credits:</strong> AR 12: The GHG emission reduction targets shall be gross targets,
+              meaning that the undertaking shall not include GHG removals, carbon credits or avoided emissions as means
+              of achieving the GHG emission reduction targets.</p>
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> </p>
-        <div class="quote">The undertaking shall disclose its climate change targets in accordance with ESRS 2 GDR-T. The undertaking shall disclose the GHG emission reduction targets it has set, including: (a) absolute GHG emission reduction targets for scopes 1, 2 and 3, either separately or combined, and where relevant in intensity value, specifying which scopes are covered and the share related to each; (b) if the scope (geography, GHGs covered, entities included) diverges from the GHG inventory (E1-8), the percentages for scopes 1, 2 and 3 covered by the target and which GHGs are covered; (c) a statement on whether targets are science-based and compatible with limiting global warming to 1.5°C, stating which framework/methodology was used, whether derived using a sectoral decarbonisation pathway, and underlying climate/policy scenarios; and brief explanation of how future developments (sales volumes, customer preferences, regulatory factors, new technologies) were considered.</div>
-        <p><strong>Target Requirements:</strong> Paragraph 24 is the core requirement: absolute GHG emission reduction targets for scopes 1, 2, 3 (separately or combined), intensity values where relevant, science-based/1.5°C compatibility statement, framework/methodology, sectoral pathway, and consideration of future developments. AR 12 clarifies targets shall be gross targets—GHG removals, carbon credits or avoided emissions shall not be included as means of achieving targets. AR 13 sets out intensity target formulation and associated absolute values. AR 14 addresses baseline/base year. AR 15 allows presentation of targets together with mitigation actions. AR 16 requires consistent reporting boundary with E1-8. AR 17 requires comparison with 1.5°C-aligned reference target values.</p><p><strong>GHG Requirements:</strong> Targets relate to gross GHG emission reductions for scopes 1, 2 and 3; AR 12 specifies gross targets (no removals, carbon credits or avoided emissions).</p><p><strong>Carbon Credits:</strong> AR 12: The GHG emission reduction targets shall be gross targets, meaning that the undertaking shall not include GHG removals, carbon credits or avoided emissions as means of achieving the GHG emission reduction targets.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-7 · Energy consumption and mix</div>
-          <div class="card-lead">The objective of this DR is to provide an understanding of the undertaking’s energy consumption and mix.</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-7 · Energy consumption and mix</div>
+              <div class="card-lead">The objective of this DR is to provide an understanding of the undertaking’s energy
+                consumption and mix.</div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to provide an understanding of the undertaking’s
+              energy consumption and mix.</p>
+            <div class="quote">The undertaking shall disclose its total energy consumption in megawatt hours (MWh)
+              related to its own operations, disaggregated by: (a) total energy consumption from fossil sources; (b)
+              total energy consumption from nuclear sources; and (c) total energy consumption from renewable sources.
+              Undertakings with operations in high climate impact sectors shall further disaggregate fossil energy
+              consumption by: coal and coal products; crude oil and petroleum products; natural gas; other fossil
+              sources; and purchased/acquired electricity, heat, steam or cooling from fossil sources. If the
+              undertaking produces energy, it shall also disclose separately its non-renewable and renewable energy
+              production in MWh.</div>
+            <p><strong>GHG Requirements:</strong> Energy consumption data supports GHG emissions reporting and
+              decarbonisation tracking, especially fuel switching and electrification levers.</p>
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to provide an understanding of the undertaking’s energy consumption and mix.</p>
-        <div class="quote">The undertaking shall disclose its total energy consumption in megawatt hours (MWh) related to its own operations, disaggregated by: (a) total energy consumption from fossil sources; (b) total energy consumption from nuclear sources; and (c) total energy consumption from renewable sources. Undertakings with operations in high climate impact sectors shall further disaggregate fossil energy consumption by: coal and coal products; crude oil and petroleum products; natural gas; other fossil sources; and purchased/acquired electricity, heat, steam or cooling from fossil sources. If the undertaking produces energy, it shall also disclose separately its non-renewable and renewable energy production in MWh.</div>
-        <p><strong>GHG Requirements:</strong> Energy consumption data supports GHG emissions reporting and decarbonisation tracking, especially fuel switching and electrification levers.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-8 · Gross scope 1, 2, 3 GHG emissions</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s direct and indirect impacts on climate chang...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-8 · Gross scope 1, 2, 3 GHG emissions</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s direct
+                and indirect impacts on climate chang...</div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s
+              direct and indirect impacts on climate change as a result of activities in its own operations and in its
+              upstream and downstream value chain.</p>
+            <div class="quote">The undertaking shall: (a) disclose absolute gross GHG emissions during the reporting
+              period, expressed as metric tonnes of CO2eq classified as: i. scope 1 GHG emissions (including percentage
+              from EU ETS if applicable); ii. scope 2 GHG emissions (location-based and market-based); iii. scope 3 GHG
+              emissions from each significant category as total and per category; (b) disclose the approach used to
+              measure GHG emissions in accordance with ESRS 2 GDR-M; (c) disaggregate scope 1 and scope 2 emissions
+              between the consolidated accounting group and other emissions excluded from that group. The undertaking
+              shall disclose its direct biogenic CO2 emissions from combustion or biodegradation of biomass separately
+              from scope 1 GHG emissions.</div>
+            <p><strong>GHG Requirements:</strong> Core GHG disclosure requirement: absolute gross emissions in tCO2eq
+              for scope 1 (including EU ETS %), scope 2 (location-based and market-based), and scope 3 (significant
+              categories). Measurement approach per ESRS 2 GDR-M. Disaggregation between consolidated group and other
+              emissions. Biogenic CO2 reported separately. AR 19–26 provide detailed measurement guidance (GHG Protocol,
+              ISO 14064-1, EU ETS methodology, GWP values, scope 3 categories, PCAF for financial institutions, cloud
+              computing subset).</p>
+            <p><strong>Carbon Credits:</strong> AR 20(d): The undertaking shall not include any removals, any purchased,
+              sold or transferred carbon credits or any GHG allowances in the calculation of GHG emissions.</p>
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s direct and indirect impacts on climate change as a result of activities in its own operations and in its upstream and downstream value chain.</p>
-        <div class="quote">The undertaking shall: (a) disclose absolute gross GHG emissions during the reporting period, expressed as metric tonnes of CO2eq classified as: i. scope 1 GHG emissions (including percentage from EU ETS if applicable); ii. scope 2 GHG emissions (location-based and market-based); iii. scope 3 GHG emissions from each significant category as total and per category; (b) disclose the approach used to measure GHG emissions in accordance with ESRS 2 GDR-M; (c) disaggregate scope 1 and scope 2 emissions between the consolidated accounting group and other emissions excluded from that group. The undertaking shall disclose its direct biogenic CO2 emissions from combustion or biodegradation of biomass separately from scope 1 GHG emissions.</div>
-        <p><strong>GHG Requirements:</strong> Core GHG disclosure requirement: absolute gross emissions in tCO2eq for scope 1 (including EU ETS %), scope 2 (location-based and market-based), and scope 3 (significant categories). Measurement approach per ESRS 2 GDR-M. Disaggregation between consolidated group and other emissions. Biogenic CO2 reported separately. AR 19–26 provide detailed measurement guidance (GHG Protocol, ISO 14064-1, EU ETS methodology, GWP values, scope 3 categories, PCAF for financial institutions, cloud computing subset).</p><p><strong>Carbon Credits:</strong> AR 20(d): The undertaking shall not include any removals, any purchased, sold or transferred carbon credits or any GHG allowances in the calculation of GHG emissions.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-9 · GHG removals and GHG mitigation projects financed through carbon credits</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s actions to reduce and permanently remove GHG...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-9 · GHG removals and GHG mitigation projects financed through carbon credits
+              </div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of the undertaking’s actions
+                to reduce and permanently remove GHG...</div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s
+              actions to reduce and permanently remove GHGs from the atmosphere and of the amount and quality of carbon
+              credits it has purchased or intends to purchase from the voluntary market.</p>
+            <div class="quote">If it has implemented GHG removal and storage projects, disclose: (a) brief description;
+              (b) amount of GHG removals and storage per project; (c) how risk of non-permanence is managed
+              (assumptions, monitoring leakage/reversal); (d) any reversals in reporting period. Disclose information
+              about projects outside own operations/value chain financed or intended to be financed through purchase of
+              carbon credits: (a) amount of carbon credits in tCO2eq verified against recognised quality standards and
+              cancelled in reporting period; (b) amount purchased but not yet cancelled; (c) share from removal projects
+              (%) with explanation of nature-based vs technological sinks. If the undertaking has made public claims of
+              GHG neutrality involving carbon credits, explain: (a) whether/how these claims and reliance on carbon
+              credits neither hinder nor undermine achievement of GHG emission reduction targets; (b) credibility and
+              integrity of carbon credits used, referring to recognised quality standards and other factors.</div>
+            <p><strong>GHG Requirements:</strong> GHG removals and storage projects are reported here, separate from
+              gross GHG emissions in E1-8.</p>
+            <p><strong>Carbon Credits:</strong> Core carbon-credits DR: Paragraphs 33–35 and AR 27–28 require disclosure
+              of verified carbon credits cancelled, purchased but not cancelled, share from removal projects
+              (nature-based vs technological), management of non-permanence/reversal risks, and credibility/integrity of
+              credits used for neutrality claims. AR 28(b): carbon credits from own operations or value chain shall not
+              be included to avoid double counting.</p>
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the undertaking’s actions to reduce and permanently remove GHGs from the atmosphere and of the amount and quality of carbon credits it has purchased or intends to purchase from the voluntary market.</p>
-        <div class="quote">If it has implemented GHG removal and storage projects, disclose: (a) brief description; (b) amount of GHG removals and storage per project; (c) how risk of non-permanence is managed (assumptions, monitoring leakage/reversal); (d) any reversals in reporting period. Disclose information about projects outside own operations/value chain financed or intended to be financed through purchase of carbon credits: (a) amount of carbon credits in tCO2eq verified against recognised quality standards and cancelled in reporting period; (b) amount purchased but not yet cancelled; (c) share from removal projects (%) with explanation of nature-based vs technological sinks. If the undertaking has made public claims of GHG neutrality involving carbon credits, explain: (a) whether/how these claims and reliance on carbon credits neither hinder nor undermine achievement of GHG emission reduction targets; (b) credibility and integrity of carbon credits used, referring to recognised quality standards and other factors.</div>
-        <p><strong>GHG Requirements:</strong> GHG removals and storage projects are reported here, separate from gross GHG emissions in E1-8.</p><p><strong>Carbon Credits:</strong> Core carbon-credits DR: Paragraphs 33–35 and AR 27–28 require disclosure of verified carbon credits cancelled, purchased but not cancelled, share from removal projects (nature-based vs technological), management of non-permanence/reversal risks, and credibility/integrity of credits used for neutrality claims. AR 28(b): carbon credits from own operations or value chain shall not be included to avoid double counting.</p>
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-10 · Internal carbon pricing</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of the role of internal carbon pricing in guiding the undertaking...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-10 · Internal carbon pricing</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of the role of internal
+                carbon pricing in guiding the undertaking...</div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the role of
+              internal carbon pricing in guiding the undertaking’s strategic and operational decision-making to reduce
+              GHG emissions.</p>
+            <div class="quote">The undertaking shall disclose information related to its use of internal carbon pricing
+              schemes: (a) explanation of whether and how carbon pricing is applied in decision-making (investment
+              decisions, transfer pricing, scenario analysis) and consistency of prices versus financial statement
+              impairment tests; (b) the average carbon price per metric tonne of GHG emissions for each internal pricing
+              scheme.</div>
+
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
-      </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of the role of internal carbon pricing in guiding the undertaking’s strategic and operational decision-making to reduce GHG emissions.</p>
-        <div class="quote">The undertaking shall disclose information related to its use of internal carbon pricing schemes: (a) explanation of whether and how carbon pricing is applied in decision-making (investment decisions, transfer pricing, scenario analysis) and consistency of prices versus financial statement impairment tests; (b) the average carbon price per metric tonne of GHG emissions for each internal pricing scheme.</div>
-        
-      </div>
-    </div>
-    <div class="dr-card" onclick="this.classList.toggle('open')">
-      <div class="card-header">
-        <div>
-          <div class="card-tag">E1-11 · Anticipated financial effects from material physical and transition risks and potential climate-related opportunities</div>
-          <div class="card-lead">The objective of this DR is to enable an understanding of how material climate-related physical risks, climate-related t...</div>
+        <div class="dr-card" onclick="this.classList.toggle('open')">
+          <div class="card-header">
+            <div>
+              <div class="card-tag">E1-11 · Anticipated financial effects from material physical and transition risks
+                and potential climate-related opportunities</div>
+              <div class="card-lead">The objective of this DR is to enable an understanding of how material
+                climate-related physical risks, climate-related t...</div>
+            </div>
+            <div><span class="badge badge-metrics">Metrics and targets</span></div>
+          </div>
+          <div class="card-body">
+            <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of how material
+              climate-related physical risks, climate-related transition risks and climate-related opportunities are
+              expected to affect the undertaking’s financial position and future performance. Paragraphs 39 and 42 add
+              topical specifications to ESRS 2 SBM 3.</p>
+            <div class="quote">Disclose anticipated financial effects from material physical risks: (a) carrying amount
+              of assets at material physical risk before considering adaptation actions, with time horizons; (b)
+              percentage of carrying amount addressed by adaptation actions at reporting date; (c) monetary amount of
+              net revenue from business activities at material physical risk, with time horizons. Disclose anticipated
+              financial effects from material transition risks: (a) carrying amount of assets at material transition
+              risk, with time horizons, and estimated potential stranded assets until mid-term and long-term under a
+              1.5°C-aligned scenario; (b) percentage of carrying amount addressed by mitigation actions; (c) breakdown
+              of carrying amount of real estate assets used as loan collaterals by energy-efficiency classes; (d)
+              estimated potential liabilities related to climate transition not yet recognised; (e) monetary amount of
+              net revenue from business activities at material transition risk, and net revenue from customers in
+              coal/oil/gas activities, with time horizons. Disclose the methodology applied to quantify amounts in
+              paragraphs 39 and 40, including scope, critical assumptions, parameters, limitations, and whether the
+              calculation leverages the process used to identify and assess transition risks. Disclose the amount of
+              assets or revenue from business activities related to identified climate-related opportunities, with
+              associated time horizons.</div>
+            <p><strong>Transition Plan Link:</strong> Paragraph 40(a) requires estimated potential stranded assets under
+              a 1.5°C-aligned scenario, linking to transition plan assumptions.</p>
+          </div>
         </div>
-        <div><span class="badge badge-metrics">Metrics and targets</span></div>
       </div>
-      <div class="card-body">
-        <p><strong>Objective:</strong> The objective of this DR is to enable an understanding of how material climate-related physical risks, climate-related transition risks and climate-related opportunities are expected to affect the undertaking’s financial position and future performance. Paragraphs 39 and 42 add topical specifications to ESRS 2 SBM 3.</p>
-        <div class="quote">Disclose anticipated financial effects from material physical risks: (a) carrying amount of assets at material physical risk before considering adaptation actions, with time horizons; (b) percentage of carrying amount addressed by adaptation actions at reporting date; (c) monetary amount of net revenue from business activities at material physical risk, with time horizons. Disclose anticipated financial effects from material transition risks: (a) carrying amount of assets at material transition risk, with time horizons, and estimated potential stranded assets until mid-term and long-term under a 1.5°C-aligned scenario; (b) percentage of carrying amount addressed by mitigation actions; (c) breakdown of carrying amount of real estate assets used as loan collaterals by energy-efficiency classes; (d) estimated potential liabilities related to climate transition not yet recognised; (e) monetary amount of net revenue from business activities at material transition risk, and net revenue from customers in coal/oil/gas activities, with time horizons. Disclose the methodology applied to quantify amounts in paragraphs 39 and 40, including scope, critical assumptions, parameters, limitations, and whether the calculation leverages the process used to identify and assess transition risks. Disclose the amount of assets or revenue from business activities related to identified climate-related opportunities, with associated time horizons.</div>
-        <p><strong>Transition Plan Link:</strong> Paragraph 40(a) requires estimated potential stranded assets under a 1.5°C-aligned scenario, linking to transition plan assumptions.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
-<footer>
-  <div class="disclaimer-box">
-    <strong>Disclaimer</strong>
-    This is a simplified reference and does not capture all nuances of the Revised ESRS June 2026. Users must refer to the actual delegated regulation (C(2026) 5010) for complete understanding and compliance. This page is intended for rapid reference during gap analysis and interoperability assessments.
-  </div>
-</footer>
 
+
+
+
+    <div class="disclaimer-box"
+      style="margin:48px auto;max-width:1100px;padding:24px 32px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text-secondary);line-height:1.6">
+      <strong style="color:var(--text);display:block;margin-bottom:8px;font-size:14px">Disclaimer</strong>
+      This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual
+      documents for complete understanding of the details with the right context. ESRS depth is sometimes distributed
+      across multiple disclosure requirements (e.g., governance in ESRS 2, targets in E1-6), which may understate
+      apparent depth if viewed only through E1. CSRD Voluntary Annex is proportionate by design; low scores reflect
+      intent, not deficiency. Timelines and effort estimates are directional, not prescriptive. National transposition
+      of CSRD and sector-specific guidance (e.g., banks, insurers) may add requirements not captured here.
+    </div>
 </body>
+
 </html>
