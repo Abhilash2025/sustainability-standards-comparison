@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+<title>Standards Explorer — CSRD Voluntary Annex Climate Map</title>
+<style>
+:root {
+      --bg: #fcf9f4;
+      --bg-elevated: #f6f3ee;
+      --bg-card: #f0ede9;
+      --bg-hover: #ebe8e3;
+      --border: #e5e2dd;
+      --border-subtle: #dcdad5;
+      --text-primary: #1c1c19;
+      --text-secondary: #54433c;
+      --text-muted: #87736b;
+      --accent: #914525;
+      --accent-soft: rgba(145, 69, 37, 0.12);
+      --accent-glow: rgba(145, 69, 37, 0.25);
+      --primary: #914525;
+      --primary-container: #af5d3b;
+      --secondary: #695d46;
+      --secondary-container: #efdec0;
+      --tertiary: #735c00;
+      --tertiary-container: #cca830;
+      --error: #ba1a1a;
+      --error-container: #ffdad6;
+      --sbti: #914525;
+      --esrs: #695d46;
+      --csrd: #735c00;
+      --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-display: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+      --font-mono: "SF Mono", Monaco, "Inconsolata", "Fira Code", monospace;
+      --radius: 4px;
+      --radius-sm: 2px;
+      --radius-lg: 8px;
+    }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary);line-height:1.55;font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:60px}
+.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:var(--primary);opacity:0;animation:floatDrift linear infinite;filter:blur(0.5px)}
+.particle-orb{position:absolute;border-radius:50%;background:radial-gradient(circle, rgba(145,69,37,0.08) 0%, transparent 70%);opacity:0;animation:orbDrift ease-in-out infinite}
+@keyframes floatDrift{0%{transform:translateY(110vh) translateX(-30px) scale(0.4);opacity:0} 6%{opacity:0.5} 94%{opacity:0.5} 100%{transform:translateY(-20vh) translateX(60px) scale(1.4);opacity:0}}
+@keyframes orbDrift{0%,100%{transform:translateY(0) translateX(0);opacity:0} 20%{opacity:0.7} 50%{transform:translateY(-40px) translateX(30px);opacity:0.4} 80%{opacity:0.7}}
+section{opacity:0;transform:translateY(16px);transition:opacity .6s ease-out,transform .6s ease-out;padding:72px 48px;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+section.visible{opacity:1;transform:translateY(0)}
+h1{font-size:38px;font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+h2{font-size:22px;font-weight:600;margin:40px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+p{color:var(--text-secondary);margin-bottom:14px;text-align:justify}
+.lead{font-size:16px;color:var(--text-secondary);margin-bottom:28px;line-height:1.6;text-align:justify}
+.meta{font-size:12px;color:var(--text-muted);margin-bottom:32px}
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(252, 249, 244, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px
+    }
+    .topbar-brand {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+      background: var(--primary);
+      padding: 6px 14px;
+      border-radius: var(--radius-lg)
+    }
+    .globe-icon {
+      color: #ffffff;
+      flex-shrink: 0
+    }
+[data-theme="light"] .topbar{background:rgba(255,255,255,0.92)}
+.topbar-brand{font-size:13px;font-weight:700;letter-spacing:0.04em;color:var(--text-primary);white-space:nowrap}
+.topbar-brand span{color:var(--accent)}
+.topbar-nav{display:flex;align-items:center;gap:10px}
+.topbar-nav a{padding:6px 14px;border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);text-decoration:none;transition:all .15s ease;white-space:nowrap;border:1px solid transparent;font-weight:500}
+.topbar-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}
+.topbar-nav a.active{color:var(--accent);background:var(--accent-soft);border-color:var(--accent)}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:5px 12px;border-radius:var(--radius-sm);font-size:11px;cursor:pointer;font-family:var(--font-sans);letter-spacing:0.04em}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.card-list{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+    .detail-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      cursor: pointer;
+      transition: all .2s ease
+    }
+    .detail-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(145, 69, 37, 0.08)
+    }
+    .detail-card.open {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(145, 69, 37, 0.12)
+    }
+    .detail-card .card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 4px
+    }
+    .detail-card .card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.3
+    }
+    .detail-card .card-lead {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5
+    }
+    .detail-card .card-body {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: none;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-secondary)
+    }
+    .detail-card.open .card-body {
+      display: block
+    }
+.detail-card.open{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 32px var(--accent-glow)}
+.detail-card .card-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:4px}
+.detail-card .card-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.detail-card .card-lead{font-size:12px;color:var(--text-secondary)}
+.detail-card .card-body{display:none;font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:14px;margin-top:12px;line-height:1.65}
+.detail-card.open .card-body{display:block}
+.detail-card .card-body p{margin-bottom:8px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
+.badge-basic{background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.25)}
+.badge-comp{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)}
+
+footer{padding:48px;border-top:1px solid var(--border-subtle);font-size:13px;color:var(--text-secondary);line-height:1.7;position:relative;z-index:1}
+.disclaimer-box{padding:18px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);margin-top:20px}
+
+@media(max-width:900px){section{padding:40px 20px} .topbar-brand{display:none}}
+.site-footer {
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      margin-top: 64px
+    }
+    .site-footer .disclaimer-box {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      max-width: none;
+      margin: 0;
+      padding: 16px 0;
+      border-left: 3px solid var(--primary-container);
+      padding-left: 16px
+    }
+    .site-footer .disclaimer-box strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em
+    }
+  </style>
+</head>
+<body>
+<div class="particles" id="particles">
+    <div class="particle" style="left:5%;width:3px;height:3px;animation-duration:18s;animation-delay:-2s;"></div>
+    <div class="particle" style="left:15%;width:5px;height:5px;animation-duration:24s;animation-delay:-5s;"></div>
+    <div class="particle" style="left:25%;width:2px;height:2px;animation-duration:16s;animation-delay:-8s;"></div>
+    <div class="particle" style="left:35%;width:4px;height:4px;animation-duration:22s;animation-delay:-11s;"></div>
+    <div class="particle" style="left:45%;width:6px;height:6px;animation-duration:28s;animation-delay:-14s;"></div>
+    <div class="particle" style="left:55%;width:3px;height:3px;animation-duration:19s;animation-delay:-1s;"></div>
+    <div class="particle" style="left:65%;width:5px;height:5px;animation-duration:25s;animation-delay:-4s;"></div>
+    <div class="particle" style="left:75%;width:2px;height:2px;animation-duration:17s;animation-delay:-7s;"></div>
+    <div class="particle" style="left:85%;width:4px;height:4px;animation-duration:23s;animation-delay:-10s;"></div>
+    <div class="particle" style="left:95%;width:6px;height:6px;animation-duration:29s;animation-delay:-13s;"></div>
+    <div class="particle-orb" style="left:10%;width:80px;height:80px;animation-duration:26s;animation-delay:-3s;"></div>
+    <div class="particle-orb" style="left:30%;width:120px;height:120px;animation-duration:34s;animation-delay:-7s;"></div>
+    <div class="particle-orb" style="left:50%;width:60px;height:60px;animation-duration:22s;animation-delay:-11s;"></div>
+    <div class="particle-orb" style="left:70%;width:100px;height:100px;animation-duration:30s;animation-delay:-15s;"></div>
+    <div class="particle-orb" style="left:90%;width:70px;height:70px;animation-duration:24s;animation-delay:-1s;"></div>
+</div>
+<header class="topbar" id="topbar">
+  <div class="topbar-brand">
+      <svg class="globe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Standards Explorer
+    </div>
+  <nav class="topbar-nav">
+    <a href="sbti-map.html">SBTi Criteria Map</a>
+    <a href="esrs-map.html">ESRS E1 Map</a>
+    <a href="csrd-map.html" class="active">Voluntary CSRD Map</a>
+  </nav>
+  <div class="topbar-actions">
+    
+  </div>
+</header>
+
+<main>
+
+<section id="hero" class="visible">
+  <h1 style="text-align:center">CSRD Voluntary Annex</h1>
+  <p class="lead" style="text-align:center">Commission Delegated Regulation (EU) 2026/5011 Annex — Voluntary Standard for undertakings below 1,000 employees. Climate-related provisions extracted and mapped by module.</p>
+
+</section>
+
+<section id="basic" class="visible">
+  <h2><span style="color:var(--sbti)">●</span> Basic Module (B) · 12 Provisions</h2>
+  <p class="lead">Required disclosures for all in-scope undertakings. Focuses on GHG emissions (Scope 1 + location-based Scope 2), energy consumption, and pollution.</p>
+  <div class="card-list">
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG emissions</div>
+    <div class="card-title">GHG emissions</div>
+    <div class="card-body">
+      <p>Green house gas emissions: the text aligns more closely with global sustainability reporting standards by giving undertakings the flexibility to use either the financial control approach or the operational control approach when defining the reporting boundary to be applied.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG emissions / pollution</div>
+    <div class="card-title">GHG emissions / pollution</div>
+    <div class="card-body">
+      <p>Emission of pollutants: the text specifies that the decision on which pollutants are material for reporting purposes should be taken following a managerial assessment that considers the undertaking’s activities and sector of operation.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG emissions — Basic Module B3</div>
+    <div class="card-title">GHG emissions — Basic Module B3</div>
+    <div class="card-body">
+      <p>B3 – Energy and greenhouse gas emissions. The undertaking shall disclose its estimated total energy consumption (in megawatt-hours) and its estimated Scope 1 and location-based Scope 2 GHG emissions.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG emissions — Scope 3 considerations</div>
+    <div class="card-title">GHG emissions — Scope 3 considerations</div>
+    <div class="card-body">
+      <p>Consideration when reporting on GHG emissions under B3 (Basic Module): This includes the consideration of information on Scope 3 GHG emissions. Scope 3 emissions are indirect GHG emissions (other than Scope 2) that derive from an undertaking’s value chain.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · scope 3 / GHG emissions</div>
+    <div class="card-title">scope 3 / GHG emissions</div>
+    <div class="card-body">
+      <p>Depending on the type of activities carried out by the undertaking, disclosing a quantification of Scope 3 GHG emissions may be relevant. Scope 3 emissions derive from an undertaking’s upstream and downstream value chain.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG emissions — Scope 1 + Scope 2</div>
+    <div class="card-title">GHG emissions — Scope 1 + Scope 2</div>
+    <div class="card-body">
+      <p>The undertaking shall disclose its estimated Scope 1 GHG emissions and its estimated location-based Scope 2 GHG emissions. [Voluntary for undertakings with 10 employees or less]</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · pollution emissions</div>
+    <div class="card-title">pollution emissions</div>
+    <div class="card-body">
+      <p>The undertaking shall disclose the emissions of pollutants to air, water and soil from its own operations.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · GHG definitions</div>
+    <div class="card-title">GHG definitions</div>
+    <div class="card-body">
+      <p>Greenhouse Gases (GHG): The gases listed in Part 2 of Annex V to Regulation (EU) 2018/1999 of the European Parliament and of the Council.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · scope 1 definition</div>
+    <div class="card-title">scope 1 definition</div>
+    <div class="card-body">
+      <p>Scope 1 GHG emissions: Direct GHG emissions from sources that are owned or controlled by the undertaking.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · scope 2 definition</div>
+    <div class="card-title">scope 2 definition</div>
+    <div class="card-body">
+      <p>Scope 2 GHG emissions: Indirect emissions are a consequence of the operations of the undertaking but occur at sources owned or controlled by another entity. Location-based Scope 2 emissions: Emissions from electricity, heat, steam and cooling purchased or acquired and consumed by the undertaking.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · scope 3 definition</div>
+    <div class="card-title">scope 3 definition</div>
+    <div class="card-body">
+      <p>Scope 3 GHG emissions: All indirect GHG emissions (not included in Scope 2 GHG emissions) that derive from an undertaking’s value chain, including both upstream and downstream emissions.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-basic">Basic Module</span> · sustainability issues list</div>
+    <div class="card-title">sustainability issues list</div>
+    <div class="card-body">
+      <p>Appendix B list of possible sustainability issues includes: Climate Change; Climate change mitigation; Climate change adaptation; Energy; Resource use and circular economy.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="comprehensive" class="visible">
+  <h2><span style="color:var(--esrs)">●</span> Comprehensive Module (C) · 9 Provisions</h2>
+  <p class="lead">Additional disclosures for undertakings seeking deeper reporting. Covers GHG reduction targets, climate transition plans, climate risks, and sector-specific requirements for high climate-impact sectors.</p>
+  <div class="card-list">
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · transition plans</div>
+    <div class="card-title">transition plans</div>
+    <div class="card-body">
+      <p>Climate transition plans: The text requires undertakings that report transition plans with targets that are not compatible with 1.5°C to be transparent about this.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · net-zero / climate neutrality</div>
+    <div class="card-title">net-zero / climate neutrality</div>
+    <div class="card-body">
+      <p>The Commission has also assessed the consistency of this delegated act with the climate neutrality objective set out in Article 2(1) of the European Climate Law (Regulation (EU) 2021/1119), and with the objective of ensuring progress on adaptation as referred to in Article 5 of that Regulation.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · meta-reference</div>
+    <div class="card-title">meta-reference</div>
+    <div class="card-body">
+      <p>The Commission has taken into account the technical advice provided by EFRAG... the Commission has made changes in relation to EFRAG’s technical advice as regards greenhouse gas emissions and climate transition plans.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · targets / transition — Comprehensive Module C3</div>
+    <div class="card-title">targets / transition — Comprehensive Module C3</div>
+    <div class="card-body">
+      <p>C3 – GHG reduction targets and climate transition. If the undertaking has established GHG emissions reduction targets, it shall disclose: (a) the base year and the most recent year; (b) absolute and intensity targets for Scope 1, Scope 2, and optionally Scope 3; (c) progress made towards those targets; (d) whether targets are science-based or compatible with limiting global warming to 1.5°C.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · climate risk — Comprehensive Module C4</div>
+    <div class="card-title">climate risk — Comprehensive Module C4</div>
+    <div class="card-body">
+      <p>C4 – Climate risks. If the undertaking has identified climate-related hazards and climate-related transition risks, it shall disclose: (a) a description of these risks; (b) the undertaking’s assessment of their current and anticipated financial effects; (c) adaptation measures taken or planned.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · practices — GHG reduction efforts</div>
+    <div class="card-title">practices — GHG reduction efforts</div>
+    <div class="card-body">
+      <p>(a) Practices, which may include, for instance, efforts to reduce the undertaking’s greenhouse gas emissions; (b) Future initiatives, which may include, for instance, investments or other types of climate action.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · transition plans — high climate impact sectors</div>
+    <div class="card-title">transition plans — high climate impact sectors</div>
+    <div class="card-body">
+      <p>High climate impact sectors are those listed in NACE Sections A to H and Section M. If the undertaking operates in high climate impact sectors and has adopted a transition plan, it shall describe: (a) the main features of the plan; (b) the decarbonisation levers identified; (c) the investments supporting the plan.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · climate risk — adaptation</div>
+    <div class="card-title">climate risk — adaptation</div>
+    <div class="card-body">
+      <p>Climate change adaptation: The process of adjustment to actual and expected climate change and its impacts. If the undertaking has identified climate-related hazards, it shall disclose the potential adverse effects and adaptation measures.</p>
+    </div>
+  </div>
+  <div class="detail-card" onclick="this.classList.toggle('open')">
+    <div class="card-tag"><span class="badge badge-comp">Comprehensive Module</span> · net-zero benchmarks</div>
+    <div class="card-title">net-zero benchmarks</div>
+    <div class="card-body">
+      <p>This information is aligned with Article 2(1) of Regulation (EU) 2021/1119 establishing the framework for achieving climate neutrality by 2050.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+
+<script>
+(function(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('section').forEach(s => observer.observe(s));
+  document.getElementById('hero')?.classList.add('visible');
+  
+  const themeBtn = document.querySelector('.theme-btn');
+  function updateThemeLabel() {
+    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'Dark' : 'Light';
+  }
+  const themeObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName === 'data-theme') updateThemeLabel();
+    });
+  });
+  themeObserver.observe(document.documentElement, { attributes: true });
+  updateThemeLabel();
+})();
+</script>
+
+
+<footer class="site-footer">
+  <div class="disclaimer-box">
+    <strong>Disclaimer</strong>
+    This is a simplified analysis and does not capture all nuances of the standards. Users must refer to the actual documents for complete understanding of the details with the right context. ESRS depth is sometimes distributed across multiple disclosure requirements (e.g., governance in ESRS 2, targets in E1-6), which may understate apparent depth if viewed only through E1. CSRD Voluntary Annex is proportionate by design; low scores reflect intent, not deficiency. Timelines and effort estimates are directional, not prescriptive. National transposition of CSRD and sector-specific guidance (e.g., banks, insurers) may add requirements not captured here.
+  </div>
+</footer>
+</body>
+</html>
